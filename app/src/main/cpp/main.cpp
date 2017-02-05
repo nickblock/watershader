@@ -23,7 +23,9 @@ App* App::theApp = nullptr;
 
   void App::init()
   {
+    _waterShader = std::make_shared<WaterShader>();
 
+    _cubeMap = std::make_shared<CubeMap>(_imageData);
   }
 
 

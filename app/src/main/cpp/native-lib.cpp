@@ -3,6 +3,9 @@
 #include <main.h>
 #include <vector>
 
+extern "C"
+{
+
 JNIEXPORT void JNICALL
 Java_com_example_nick_watershader_NativeWrapper_createImage(JNIEnv *env, jobject instance,
                                                             jbyteArray data_, jint width,
@@ -19,12 +22,9 @@ Java_com_example_nick_watershader_NativeWrapper_createImage(JNIEnv *env, jobject
 JNIEXPORT void JNICALL
 Java_com_example_nick_watershader_NativeWrapper_init(JNIEnv *env, jclass type) {
 
-    App::get()->init();
 
 }
 
-extern "C"
-{
 jstring
 Java_com_example_nick_watershader_MainActivity_stringFromJNI(
         JNIEnv *env,
@@ -36,6 +36,8 @@ Java_com_example_nick_watershader_MainActivity_stringFromJNI(
 void Java_com_example_nick_watershader_NativeWrapper_on_1surface_1created
         (JNIEnv *, jobject) {
     on_surface_created();
+
+    App::get()->init();
 }
 void Java_com_example_nick_watershader_NativeWrapper_on_1surface_1changed
         (JNIEnv *env, jobject, jint width, jint height) {

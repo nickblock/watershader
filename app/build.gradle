@@ -15,6 +15,10 @@ android {
                 cppFlags "-std=c++11"
             }
         }
+        ndk {
+            moduleName "native-lib"
+            ldLibs "log"
+        }
     }
     buildTypes {
         release {

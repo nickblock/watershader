@@ -29,8 +29,9 @@ public:
 protected:
 
 
-    WaterShader*    _waterShader;
-    CubeMap*        _cubeMap;
+    std::shared_ptr<WaterShader>    _waterShader;
+    std::shared_ptr<CubeMap>        _cubeMap;
+    
     ImageDataList  _imageData;
     static App* theApp;
 };
