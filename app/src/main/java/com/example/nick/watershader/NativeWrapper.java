@@ -16,5 +16,4 @@ public class NativeWrapper {
 
     public static native void createImage(byte[] data, int width, int height);
 
-    public static native void init();
 }

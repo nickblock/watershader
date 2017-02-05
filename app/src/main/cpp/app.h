@@ -7,10 +7,12 @@
 
 #include "watershader.h"
 #include "texture.h"
+#include "heightmap.h"
 
 #include <GLES2/gl2.h>
 #include <vector>
 #include <memory>
+
 
 class App
 {
@@ -26,18 +28,26 @@ public:
 
     void loadImage(signed char* data, int dataSize, int width, int height);
 
+    void setScreen(int width, int height);
+
+    void drawFrame();
+
 protected:
 
 
     std::shared_ptr<WaterShader>    _waterShader;
     std::shared_ptr<CubeMap>        _cubeMap;
-    
+    std::shared_ptr<HeightMap>      _heightMap;
+
     ImageDataList  _imageData;
     static App* theApp;
+
+    int _width, _height;
 };
 
 
 
+void CHECKGL_ERROR();
 
 void on_surface_created();
 void on_surface_changed(int width, int height);

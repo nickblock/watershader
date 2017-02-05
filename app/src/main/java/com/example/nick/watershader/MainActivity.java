@@ -92,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
                 NativeWrapper.createImage(bytes, bm_lostvalley_south.getWidth(), bm_lostvalley_south.getHeight());
             }
 
-            NativeWrapper.init();
-
         } else {
             // Should never be seen in production, since the manifest filters
             // unsupported devices.
