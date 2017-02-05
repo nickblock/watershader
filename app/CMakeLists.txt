@@ -19,7 +19,9 @@ add_library( # Sets the name of the library.
              # Associated headers in the same location as their source
              # file are automatically included.
              src/main/cpp/native-lib.cpp
-             src/main/cpp/main.cpp )
+             src/main/cpp/main.cpp
+             src/main/cpp/texture.cpp
+             src/main/cpp/watershader.cpp)
 
 
 target_include_directories(native-lib PRIVATE
