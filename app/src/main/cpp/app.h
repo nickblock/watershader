@@ -39,6 +39,7 @@ protected:
 
     std::shared_ptr<WaterShader>    _waterShader;
     std::shared_ptr<CubeMap>        _cubeMap;
+    std::shared_ptr<Texture>        _texture;
     std::shared_ptr<HeightMap>      _heightMap;
 
     ImageDataList  _imageData;

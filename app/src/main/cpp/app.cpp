@@ -43,7 +43,14 @@ void App::init()
   
   _waterShader = std::make_shared<WaterShader>();
 
+  ImageData debugImage;
+  debugImage.width = 4;
+  debugImage.height = 4;
+  debugImage.data = {4*4*4};
+  memset(debugImage.data.data(), 255, debugImage.data.size());
+
   _cubeMap = std::make_shared<CubeMap>(_imageData);
+  _texture = std::make_shared<Texture>(debugImage);
 
   _heightMap = std::make_shared<HeightMap>(10, 10);
 
@@ -66,7 +73,7 @@ void App::drawFrame()
   _waterShader->use();
 
   glActiveTexture(0);
-  _cubeMap->bind();
+  _texture->bind();
 
 
   glm::mat4 view = glm::lookAt(_eyePos, _eyePos + glm::vec3(0, 0, -_eyeDist), glm::vec3(0, 1, 0));

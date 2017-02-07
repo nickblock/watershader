@@ -10,7 +10,7 @@
 
 struct ImageData
 {
-    std::vector<signed char> data;
+    std::vector<unsigned char> data;
     int width, height;
 };
 
@@ -19,7 +19,7 @@ using ImageDataList = std::vector<ImageData>;
 class Texture
 {
 public:
-    Texture(const char* filename);
+    Texture(const ImageData& imageData);
 
     void bind();
 

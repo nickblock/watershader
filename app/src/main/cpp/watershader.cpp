@@ -19,12 +19,12 @@ const char* fragSource = {
   "varying vec3 position;\n"
   "varying vec3 worldNormal;\n"
   "uniform vec3 eyePos;\n"
-  "uniform samplerCube envMap;\n"
+  "uniform samplerCube tex;\n"
   "\n"
   "void main() {\n"
   "vec3 eye = normalize(eyePos - position);\n"
   "vec3 r = reflect(eye, worldNormal);\n"
-  "vec4 color = textureCube(envMap, r);\n"
+  "vec4 color = textureCube(tex, r);\n"
   "color.a = 0.5;\n"
   "gl_FragColor = color;\n"
   "}\n"
@@ -98,15 +98,19 @@ const char* vertexSource = {
 
 const char* simpleVertex = {
   "attribute vec3 in_position;\n"
+  "varying vec3 pos;\n"
   "uniform mat4 MVPMatrix;\n"
   "void main() {\n"
+  "pos = in_position;\n"
   "gl_Position = MVPMatrix * vec4(in_position, 1.0);\n"
   "}\n"
 };
 
 const char* simpleFrag = {
+  "uniform sampler2D tex;\n"
+  "varying vec3 pos;"
   "void main() {\n"
-  "gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
+  "gl_FragColor = vec4(texture2D(tex, pos.xy).rgb, 1.0);\n"
   "}\n"
 };
 
@@ -170,7 +174,7 @@ WaterShader::WaterShader() {
   GLuint numWavesId = glGetUniformLocation(_programId, "numWaves");
   glUniform1i(numWavesId, 4);
   CHECKGL_ERROR();
-  GLuint envMapId = glGetUniformLocation(_programId, "envMap");    
+  GLuint envMapId = glGetUniformLocation(_programId, "tex");    
   glUniform1i(envMapId, 0);
   CHECKGL_ERROR();
 

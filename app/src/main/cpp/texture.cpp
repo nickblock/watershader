@@ -4,8 +4,28 @@
 #include "texture.h"
 #include "app.h"
 
-Texture::Texture(const char *filename) {
+Texture::Texture(const ImageData& imageData) {
 
+  glGenTextures(1, &_id);
+  glBindTexture(GL_TEXTURE_2D, _id);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  glTexImage2D(GL_TEXTURE_2D,
+               0,
+               GL_RGBA,
+               imageData.width,
+               imageData.height,
+               0,
+               GL_RGBA,
+               GL_UNSIGNED_BYTE,
+               imageData.data.data());
+
+  CHECKGL_ERROR();
+}
+void Texture::bind()
+{
+  glBindTexture(GL_TEXTURE_2D, _id);
 }
 
 CubeMap::CubeMap(const ImageDataList & imageDataList) {

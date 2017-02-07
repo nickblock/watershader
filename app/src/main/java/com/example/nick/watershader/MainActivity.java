@@ -54,46 +54,52 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             rendererSet = true;
             setContentView(glSurfaceView);
 
-            Bitmap bm_lostvalley_east = BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_east);
+            //synchronized(this)
             {
+                Bitmap bm_lostvalley_east = BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_east);
                 ByteBuffer buffer = ByteBuffer.allocate(bm_lostvalley_east.getByteCount());
                 bm_lostvalley_east.copyPixelsToBuffer(buffer);
-                byte[] bytes = new byte[buffer.remaining()];
+                byte[] bytes = buffer.array();
                 NativeWrapper.createImage(bytes, bm_lostvalley_east.getWidth(), bm_lostvalley_east.getHeight());
             }
-            Bitmap bm_lostvalley_west = BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_west);
+            //synchronized(this)
             {
+                Bitmap bm_lostvalley_west = BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_west);
                 ByteBuffer buffer = ByteBuffer.allocate(bm_lostvalley_west.getByteCount());
                 bm_lostvalley_west.copyPixelsToBuffer(buffer);
-                byte[] bytes = new byte[buffer.remaining()];
+                byte[] bytes = buffer.array();
                 NativeWrapper.createImage(bytes, bm_lostvalley_west.getWidth(), bm_lostvalley_west.getHeight());
             }
-            Bitmap bm_lostvalley_up = BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_up);
+            //synchronized(this)
             {
+                Bitmap bm_lostvalley_up = BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_up);
                 ByteBuffer buffer = ByteBuffer.allocate(bm_lostvalley_up.getByteCount());
                 bm_lostvalley_up.copyPixelsToBuffer(buffer);
-                byte[] bytes = new byte[buffer.remaining()];
+                byte[] bytes = buffer.array();
                 NativeWrapper.createImage(bytes, bm_lostvalley_up.getWidth(), bm_lostvalley_up.getHeight());
             }
-            Bitmap bm_lostvalley_down = BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_down);
+            //synchronized(this)
             {
+                Bitmap bm_lostvalley_down = BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_down);
                 ByteBuffer buffer = ByteBuffer.allocate(bm_lostvalley_down.getByteCount());
                 bm_lostvalley_down.copyPixelsToBuffer(buffer);
-                byte[] bytes = new byte[buffer.remaining()];
+                byte[] bytes = buffer.array();
                 NativeWrapper.createImage(bytes, bm_lostvalley_down.getWidth(), bm_lostvalley_down.getHeight());
             }
-            Bitmap bm_lostvalley_north = BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_north);
+            //synchronized(this)
             {
+                Bitmap bm_lostvalley_north = BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_north);
                 ByteBuffer buffer = ByteBuffer.allocate(bm_lostvalley_north.getByteCount());
                 bm_lostvalley_north.copyPixelsToBuffer(buffer);
-                byte[] bytes = new byte[buffer.remaining()];
+                byte[] bytes = buffer.array();
                 NativeWrapper.createImage(bytes, bm_lostvalley_north.getWidth(), bm_lostvalley_north.getHeight());
             }
-            Bitmap bm_lostvalley_south = BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_south);
+            //synchronized(this)
             {
+                Bitmap bm_lostvalley_south = BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_south);
                 ByteBuffer buffer = ByteBuffer.allocate(bm_lostvalley_south.getByteCount());
                 bm_lostvalley_south.copyPixelsToBuffer(buffer);
-                byte[] bytes = new byte[buffer.remaining()];
+                byte[] bytes = buffer.array();
                 NativeWrapper.createImage(bytes, bm_lostvalley_south.getWidth(), bm_lostvalley_south.getHeight());
             }
 
