@@ -26,27 +26,15 @@ void CHECKGL_ERROR()
 
 App* App::theApp = nullptr;
 
-  std::vector<float> debugVerts = {
-          -0.5,  -0.5, 0.0,
-          -0.5,   0.5, 0.0,
-          0.5,    0.5, 0.0,
-          0.5,   -0.5, 0.0
-  };
-  std::vector<int> debugIndices = {
-    0, 1, 2, 0, 2, 3
-  };
-
-  GLuint dVbo, dIbo;
-
 void App::loadImage(signed char* data, int dataSize, int width, int height)
 {
-    ImageData imageData;
+  ImageData imageData;
 
-    imageData.data.insert(imageData.data.begin(), data, data + dataSize);
-    imageData.width = width;
-    imageData.height = height;
+  imageData.data.insert(imageData.data.begin(), data, data + dataSize);
+  imageData.width = width;
+  imageData.height = height;
 
-    _imageData.push_back(imageData);
+  _imageData.push_back(imageData);
 }
 
 void App::init()
@@ -57,23 +45,11 @@ void App::init()
 
   _cubeMap = std::make_shared<CubeMap>(_imageData);
 
-  _heightMap = std::make_shared<HeightMap>(2, 2);
+  _heightMap = std::make_shared<HeightMap>(10, 10);
 
-  _eyePos = glm::vec3(0, 0, 10);
+  _eyeDist = 10.f;
+  _eyePos = glm::vec3(0, 0, _eyeDist);
 
-  glGenBuffers(1, &dVbo);
-  glBindBuffer(GL_ARRAY_BUFFER, dVbo);
-  glBufferData(GL_ARRAY_BUFFER,
-               debugVerts.size() * sizeof(float),
-               (GLfloat*) debugVerts.data(),
-               GL_STATIC_DRAW);
-
-  glGenBuffers(1, &dIbo);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dIbo);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-               debugIndices.size() * sizeof(int),
-               (GLuint*) debugIndices.data(),
-               GL_STATIC_DRAW);
 }
 
 void App::setScreen(int width, int height)
@@ -93,7 +69,7 @@ void App::drawFrame()
   _cubeMap->bind();
 
 
-  glm::mat4 view = glm::lookAt(_eyePos, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+  glm::mat4 view = glm::lookAt(_eyePos, _eyePos + glm::vec3(0, 0, -_eyeDist), glm::vec3(0, 1, 0));
 
   glm::mat4 proj = glm::perspectiveFov(M_PI/2.0, (double)_width, (double)_height, 0.5, 1000.0);
 
@@ -101,22 +77,7 @@ void App::drawFrame()
 
   _waterShader->setUniforms(MVP, _eyePos, 0.f, 1.f);
 
-  glBindBuffer(GL_ARRAY_BUFFER, dVbo);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dIbo);
-
-  GLuint posAttribute = _waterShader->getPosAttr();
-  glEnableVertexAttribArray(posAttribute);
-  glVertexAttribPointer(posAttribute,3,GL_FLOAT,GL_FALSE,0,0);
-
-  glDrawElements(
-    GL_TRIANGLES,
-    debugIndices.size(), 
-    GL_UNSIGNED_INT, 
-    (void*)0
-  );
-
-
-  //_heightMap->draw(_waterShader->getPosAttr());
+  _heightMap->draw(_waterShader->getPosAttr());
 
 }
 

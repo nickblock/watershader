@@ -21,7 +21,7 @@ HeightMap::HeightMap(int rows, int cols)
   startY *= scale;
 
   int index = 0;
-  for(int y = 0; y<=rows; y++) {
+  for(int y=0; y<=rows; y++) {
     for(int x=0; x<=cols; x++) {
 
       int vertIndex = (x + y*(cols+1)) * 3;
@@ -30,12 +30,13 @@ HeightMap::HeightMap(int rows, int cols)
       verts[vertIndex + 2] = 0;
 
       if(x != cols && y != rows) {
+        vertIndex /= 3;
         indices[index + 0] = vertIndex;
         indices[index + 1] = vertIndex+1;
-        indices[index + 2] = vertIndex+cols;
-        indices[index + 3] = vertIndex+cols;
+        indices[index + 2] = vertIndex+cols+1;
+        indices[index + 3] = vertIndex+cols+1;
         indices[index + 4] = vertIndex+1;
-        indices[index + 5] = vertIndex+cols+1;
+        indices[index + 5] = vertIndex+cols+2;
 
         index += 6;
       }
@@ -66,7 +67,7 @@ void HeightMap::draw(GLuint posAttribute)
 
 
   glEnableVertexAttribArray(posAttribute);
-  glVertexAttribPointer(posAttribute,3,GL_FLOAT,GL_FALSE,3,0);
+  glVertexAttribPointer(posAttribute,3,GL_FLOAT,GL_FALSE,0,0);
 
   glDrawElements(
     GL_TRIANGLES,
