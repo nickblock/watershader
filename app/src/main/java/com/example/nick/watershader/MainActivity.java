@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.TextView;
 import android.opengl.GLSurfaceView;
 import android.app.ActivityManager;
@@ -14,10 +16,13 @@ import android.widget.Toast;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
     private GLSurfaceView glSurfaceView;
     private boolean rendererSet;
+
+    private float touchX;
+    private float touchY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
                 NativeWrapper.createImage(bytes, bm_lostvalley_south.getWidth(), bm_lostvalley_south.getHeight());
             }
 
+            glSurfaceView.setOnTouchListener(this);
+
         } else {
             // Should never be seen in production, since the manifest filters
             // unsupported devices.
@@ -127,5 +134,27 @@ public class MainActivity extends AppCompatActivity {
         if (rendererSet) {
             glSurfaceView.onResume();
         }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        if(event.getActionIndex() == 0) {
+            if(event.getAction() == MotionEvent.ACTION_DOWN)
+            {
+                touchX = event.getX();
+                touchY = event.getY();
+            }
+            else if(event.getAction() == MotionEvent.ACTION_MOVE) {
+                float moveX = event.getX() - touchX;
+                float moveY = event.getY() - touchY;
+
+                NativeWrapper.touchMove(moveX * 0.01f, moveY * 0.01f);
+
+                touchX = event.getX();
+                touchY = event.getY();
+            }
+        }
+        return true;
     }
 }

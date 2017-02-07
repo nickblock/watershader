@@ -9,15 +9,25 @@
 
 HeightMap::HeightMap(int rows, int cols)
 {
-  std::vector<glm::vec3> verts((rows+1) * (cols+1));
+  std::vector<float> verts((rows+1) * (cols+1) *3);
   std::vector<int> indices(rows * cols * 6);
+
+  float scale = 1.0f;
+
+  float startX = -cols/2.f;
+  float startY = -rows/2.f;
+
+  startX *= scale;
+  startY *= scale;
 
   int index = 0;
   for(int y = 0; y<=rows; y++) {
     for(int x=0; x<=cols; x++) {
 
-      int vertIndex = x + y*cols;
-      verts[vertIndex] = glm::vec3(x, 0, y);
+      int vertIndex = (x + y*(cols+1)) * 3;
+      verts[vertIndex + 0] = startX + (x * scale);
+      verts[vertIndex + 1] = startY + (y * scale);
+      verts[vertIndex + 2] = 0;
 
       if(x != cols && y != rows) {
         indices[index + 0] = vertIndex;
@@ -36,7 +46,7 @@ HeightMap::HeightMap(int rows, int cols)
   glGenBuffers(1, &_vbo);
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
   glBufferData(GL_ARRAY_BUFFER, 
-               verts.size() * sizeof(glm::vec3), 
+               verts.size() * sizeof(float),
                (GLfloat*) verts.data(),
                GL_STATIC_DRAW);
 
@@ -59,7 +69,7 @@ void HeightMap::draw(GLuint posAttribute)
   glVertexAttribPointer(posAttribute,3,GL_FLOAT,GL_FALSE,3,0);
 
   glDrawElements(
-    GL_TRIANGLES, 
+    GL_TRIANGLES,
     _numIndices, 
     GL_UNSIGNED_INT, 
     (void*)0

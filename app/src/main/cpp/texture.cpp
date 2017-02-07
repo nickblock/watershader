@@ -2,12 +2,15 @@
 // Created by nick on 05/02/17.
 //
 #include "texture.h"
+#include "app.h"
 
 Texture::Texture(const char *filename) {
 
 }
 
 CubeMap::CubeMap(const ImageDataList & imageDataList) {
+
+  assert(imageDataList.size() == 6);
 
   glGenTextures(1, &_id);
   glBindTexture(GL_TEXTURE_CUBE_MAP, _id);
@@ -26,6 +29,7 @@ CubeMap::CubeMap(const ImageDataList & imageDataList) {
                  GL_UNSIGNED_BYTE,
                  imageDataList[i].data.data());
 
+    CHECKGL_ERROR();
   }
 }
 void CubeMap::bind()

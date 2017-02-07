@@ -26,6 +26,17 @@ void CHECKGL_ERROR()
 
 App* App::theApp = nullptr;
 
+  std::vector<float> debugVerts = {
+          -0.5,  -0.5, 0.0,
+          -0.5,   0.5, 0.0,
+          0.5,    0.5, 0.0,
+          0.5,   -0.5, 0.0
+  };
+  std::vector<int> debugIndices = {
+    0, 1, 2, 0, 2, 3
+  };
+
+  GLuint dVbo, dIbo;
 
 void App::loadImage(signed char* data, int dataSize, int width, int height)
 {
@@ -46,7 +57,23 @@ void App::init()
 
   _cubeMap = std::make_shared<CubeMap>(_imageData);
 
-  _heightMap = std::make_shared<HeightMap>(20, 20);
+  _heightMap = std::make_shared<HeightMap>(2, 2);
+
+  _eyePos = glm::vec3(0, 0, 10);
+
+  glGenBuffers(1, &dVbo);
+  glBindBuffer(GL_ARRAY_BUFFER, dVbo);
+  glBufferData(GL_ARRAY_BUFFER,
+               debugVerts.size() * sizeof(float),
+               (GLfloat*) debugVerts.data(),
+               GL_STATIC_DRAW);
+
+  glGenBuffers(1, &dIbo);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dIbo);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+               debugIndices.size() * sizeof(int),
+               (GLuint*) debugIndices.data(),
+               GL_STATIC_DRAW);
 }
 
 void App::setScreen(int width, int height)
@@ -58,7 +85,7 @@ void App::setScreen(int width, int height)
 }
 void App::drawFrame()
 {
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   _waterShader->use();
 
@@ -66,20 +93,34 @@ void App::drawFrame()
   _cubeMap->bind();
 
 
-  glm::vec3 eyePos = glm::vec3(0, 10, 0);
-  glm::mat4 view;
-  view = glm::lookAt(eyePos, glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
+  glm::mat4 view = glm::lookAt(_eyePos, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
-  glm::mat4 proj = glm::perspective(M_PI/4.0, _height/(double)_width, 0.5, 100.0);
+  glm::mat4 proj = glm::perspectiveFov(M_PI/2.0, (double)_width, (double)_height, 0.5, 1000.0);
 
-  glm::mat4 MVP = view * proj;
+  glm::mat4 MVP = proj * view;
 
-  _waterShader->setUniforms(MVP, eyePos, 0.f, 1.f);
+  _waterShader->setUniforms(MVP, _eyePos, 0.f, 1.f);
 
-  _heightMap->draw(_waterShader->getPosAttr());
+  glBindBuffer(GL_ARRAY_BUFFER, dVbo);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dIbo);
+
+  GLuint posAttribute = _waterShader->getPosAttr();
+  glEnableVertexAttribArray(posAttribute);
+  glVertexAttribPointer(posAttribute,3,GL_FLOAT,GL_FALSE,0,0);
+
+  glDrawElements(
+    GL_TRIANGLES,
+    debugIndices.size(), 
+    GL_UNSIGNED_INT, 
+    (void*)0
+  );
+
+
+  //_heightMap->draw(_waterShader->getPosAttr());
 
 }
-void on_surface_created()
-{
 
-}
+  void App::touchMove(float x, float y)
+  {
+    _eyePos += glm::vec3(x, y, 0);
+  }

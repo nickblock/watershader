@@ -32,6 +32,8 @@ public:
 
     void drawFrame();
 
+    void touchMove(float x, float y);
+
 protected:
 
 
@@ -43,6 +45,8 @@ protected:
     static App* theApp;
 
     int _width, _height;
+
+    glm::vec3 _eyePos;
 };
 
 
