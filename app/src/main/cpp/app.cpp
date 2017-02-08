@@ -46,11 +46,17 @@ void App::init()
   ImageData debugImage;
   debugImage.width = 4;
   debugImage.height = 4;
-  debugImage.data = {4*4*4};
-  memset(debugImage.data.data(), 255, debugImage.data.size());
+  debugImage.data.resize(4*4*4, 255);
+
+  for(int i=0; i<debugImage.width*debugImage.height; i++){
+    int index = i * 4;
+    debugImage.data[index+0] = 0;
+    debugImage.data[index+1] = 0;
+  }
+
 
   _cubeMap = std::make_shared<CubeMap>(_imageData);
-  _texture = std::make_shared<Texture>(debugImage);
+  _texture = std::make_shared<Texture>(_imageData[0]);
 
   _heightMap = std::make_shared<HeightMap>(10, 10);
 
