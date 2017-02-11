@@ -6,7 +6,7 @@
 class HeightMap {
 
 public:
-  HeightMap(int rows, int cols);
+  HeightMap(int dim);
 
   void draw(GLuint posAttribute);
   

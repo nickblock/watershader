@@ -14,6 +14,8 @@
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <time.h>
+#define NS_IN_SEC 1000000000
 
 void CHECKGL_ERROR()
 {
@@ -60,10 +62,11 @@ void App::init()
   _cubeMap = std::make_shared<CubeMap>(_imageData);
   _texture = std::make_shared<Texture>(_imageData[5]);
 
-  _heightMap = std::make_shared<HeightMap>(1, 1);
+  _heightMap = std::make_shared<HeightMap>(100);
 
-  _eyeDist = 10.f;
+  _eyeDist = 50.f;
   _eyePos = glm::vec3(0, 0, _eyeDist);
+  _mousePos = glm::vec3(0.5);
 
 }
 
@@ -84,6 +87,8 @@ void App::drawFrame()
   _cubeMap->bind();
   glEnable(GL_TEXTURE_CUBE_MAP);
 
+  float waveAmp = _mousePos.y;
+
 
   glm::mat4 view = glm::lookAt(_eyePos, _eyePos + glm::vec3(0, 0, -_eyeDist), glm::vec3(0, 1, 0));
 
@@ -91,7 +96,11 @@ void App::drawFrame()
 
   glm::mat4 MVP = proj * view;
 
-  _waterShader->setUniforms(MVP, _eyePos, 0.f, 1.f);
+  timespec curTime;
+  clock_gettime(CLOCK_MONOTONIC, &curTime);
+  float time = (curTime.tv_sec * NS_IN_SEC + curTime.tv_nsec) / float(NS_IN_SEC);
+
+  _waterShader->setUniforms(MVP, _eyePos, time, waveAmp);
 
   _heightMap->draw(_waterShader->getPosAttr());
 
@@ -99,5 +108,6 @@ void App::drawFrame()
 
   void App::touchMove(float x, float y)
   {
-    _eyePos += glm::vec3(x, y, 0);
+    _mousePos += glm::vec3(x/10.f, y/10.f, 0.f);
+    _mousePos = glm::max(glm::vec3(0.f), glm::min(glm::vec3(1.0), _mousePos));
   }

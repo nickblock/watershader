@@ -48,7 +48,9 @@ protected:
     int _width, _height;
 
     glm::vec3 _eyePos;
+    glm::vec3 _mousePos;
     float     _eyeDist;
+
 };
 
 

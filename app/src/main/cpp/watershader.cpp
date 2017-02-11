@@ -50,7 +50,7 @@ const char* waterVertex = {
   " float frequency = 2.0*pi/wavelength[i];\n"
   " float phase = speed[i] * frequency;\n"
   " float theta = dot(direction[i], vec2(x, y));\n"
-  " return amplitude[i] * in_amp * sin(theta * frequency + time * phase);\n"
+  " return amplitude[i] * sin(theta * frequency + time * phase);\n"
   "}\n"
   "\n"
   "float waveHeight(float x, float y) {\n"
@@ -64,7 +64,7 @@ const char* waterVertex = {
   " float frequency = 2.0*pi/wavelength[i];\n"
   " float phase = speed[i] * frequency;\n"
   " float theta = dot(direction[i], vec2(x, y));\n"
-  " float A = amplitude[i] * direction[i].x * frequency;\n"
+  " float A = amplitude[i] * in_amp * direction[i].x * frequency;\n"
   " return A * cos(theta * frequency + time * phase);\n"
   "}\n"
   "\n"
@@ -72,7 +72,7 @@ const char* waterVertex = {
   " float frequency = 2.0*pi/wavelength[i];\n"
   " float phase = speed[i] * frequency;\n"
   " float theta = dot(direction[i], vec2(x, y));\n"
-  " float A = amplitude[i] * direction[i].y * frequency;\n"
+  " float A = amplitude[i] * in_amp * direction[i].y * frequency;\n"
   " return A * cos(theta * frequency + time * phase);\n"
   "}\n"
   "\n"
@@ -138,8 +138,8 @@ WaterShader::WaterShader() {
   GLuint vertexId = glCreateShader(GL_VERTEX_SHADER);
   CHECKGL_ERROR();
 
-  int len = strlen(simpleVertex);
-  glShaderSource(vertexId, 1, &simpleVertex, &len);
+  int len = strlen(waterVertex);
+  glShaderSource(vertexId, 1, &waterVertex, &len);
   CHECKGL_ERROR();
 
   glCompileShader(vertexId);
@@ -150,8 +150,8 @@ WaterShader::WaterShader() {
   GLuint fragId = glCreateShader(GL_FRAGMENT_SHADER);
   CHECKGL_ERROR();
 
-  len = strlen(simpleFrag);
-  glShaderSource(fragId, 1, &simpleFrag, &len);
+  len = strlen(waterFrag);
+  glShaderSource(fragId, 1, &waterFrag, &len);
   CHECKGL_ERROR();
 
   glCompileShader(fragId);

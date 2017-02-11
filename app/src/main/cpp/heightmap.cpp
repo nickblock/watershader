@@ -7,36 +7,33 @@
 
 #include <vector>
 
-HeightMap::HeightMap(int rows, int cols)
+HeightMap::HeightMap(int dim)
 {
-  std::vector<float> verts((rows+1) * (cols+1) *3);
-  std::vector<int> indices(rows * cols * 6);
+  std::vector<glm::vec3> verts((dim+1) * (dim+1));
+  std::vector<int> indices(dim * dim * 6);
 
-  float scale = 10.0f;
+  float scale = 1.f;//10.f / dim;
 
-  float startX = -cols/2.f;
-  float startY = -rows/2.f;
+  float start = -dim/2.f;
 
-  startX *= scale;
-  startY *= scale;
+  start *= scale;
 
   int index = 0;
-  for(int y=0; y<=rows; y++) {
-    for(int x=0; x<=cols; x++) {
+  for(int y=0; y<=dim; y++) {
+    for(int x=0; x<=dim; x++) {
 
-      int vertIndex = (x + y*(cols+1)) * 3;
-      verts[vertIndex + 0] = startX + (x * scale);
-      verts[vertIndex + 1] = startY + (y * scale);
-      verts[vertIndex + 2] = 0;
+      int vertIndex = (x + y*(dim+1));
+      verts[vertIndex].x = start + (x * scale);
+      verts[vertIndex].y = start + (y * scale);
+      verts[vertIndex].z = 0;
 
-      if(x != cols && y != rows) {
-        vertIndex /= 3;
+      if(x != dim && y != dim) {
         indices[index + 0] = vertIndex;
         indices[index + 1] = vertIndex+1;
-        indices[index + 2] = vertIndex+cols+1;
-        indices[index + 3] = vertIndex+cols+1;
+        indices[index + 2] = vertIndex+dim+1;
+        indices[index + 3] = vertIndex+dim+1;
         indices[index + 4] = vertIndex+1;
-        indices[index + 5] = vertIndex+cols+2;
+        indices[index + 5] = vertIndex+dim+2;
 
         index += 6;
       }
@@ -47,7 +44,7 @@ HeightMap::HeightMap(int rows, int cols)
   glGenBuffers(1, &_vbo);
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
   glBufferData(GL_ARRAY_BUFFER, 
-               verts.size() * sizeof(float),
+               verts.size() * sizeof(glm::vec3),
                (GLfloat*) verts.data(),
                GL_STATIC_DRAW);
 
