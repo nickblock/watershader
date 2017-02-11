@@ -80,9 +80,9 @@ void App::drawFrame()
 
   _waterShader->use();
 
-  //glEnable(GL_TEXTURE_CUBE_MAP);
   glActiveTexture(0);
-  _texture->bind();
+  _cubeMap->bind();
+  glEnable(GL_TEXTURE_CUBE_MAP);
 
 
   glm::mat4 view = glm::lookAt(_eyePos, _eyePos + glm::vec3(0, 0, -_eyeDist), glm::vec3(0, 1, 0));

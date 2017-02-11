@@ -107,13 +107,13 @@ const char* simpleVertex = {
 };
 
 const char* simpleFrag = {
-  "uniform sampler2D tex;\n"
+  "uniform samplerCube tex;\n"
   "varying vec3 pos;\n"
   "uniform vec3 eyePos;\n"
   "void main() {\n"
-  "vec2 normPos = 0.1 * pos.xy + vec2(0.5, 0.5);\n"
-  "//gl_FragColor = vec4(textureCube(tex, vec3(normPos, 1.0)).rgb, 1.0);\n"
-  "gl_FragColor = vec4(texture2D(tex, normPos).xyz, 1.0);\n"
+  "vec3 normPos = vec3(0.1 * pos.xy + vec2(0.5, 0.5), 1.0);\n"
+  "gl_FragColor = vec4(textureCube(tex, normalize(normPos)).rgb, 1.0);\n"
+  "//gl_FragColor = vec4(texture2D(tex, normPos.xy).xyz, 1.0);\n"
   "}\n"
 };
 

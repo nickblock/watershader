@@ -54,6 +54,9 @@ CubeMap::CubeMap(const ImageDataList & imageDataList) {
 
     CHECKGL_ERROR();
   }
+  glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+
+  CHECKGL_ERROR();
 }
 void CubeMap::bind()
 {
