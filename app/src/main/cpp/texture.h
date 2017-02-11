@@ -14,6 +14,7 @@ struct ImageData
     int width, height;
 };
 
+
 using ImageDataList = std::vector<ImageData>;
 
 class Texture
