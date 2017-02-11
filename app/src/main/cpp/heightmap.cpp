@@ -12,7 +12,7 @@ HeightMap::HeightMap(int rows, int cols)
   std::vector<float> verts((rows+1) * (cols+1) *3);
   std::vector<int> indices(rows * cols * 6);
 
-  float scale = 1.0f;
+  float scale = 10.0f;
 
   float startX = -cols/2.f;
   float startY = -rows/2.f;
