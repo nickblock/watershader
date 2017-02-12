@@ -45,20 +45,7 @@ void App::init()
   
   _waterShader = std::make_shared<WaterShader>();
 
-  ImageData debugImage;
-  debugImage.width = 2;
-  debugImage.height = 2;
-  debugImage.data.resize(debugImage.width*debugImage.height*4, 255);
-
-  for(int i=0; i<debugImage.width*debugImage.height; i++){
-    if(i % 2) continue;
-    int index = i * 4;
-
-    debugImage.data[index+0] = 0;
-    debugImage.data[index+1] = 0;
-  }
-
-
+  //pass raw image data to cubemap 
   _cubeMap = std::make_shared<CubeMap>(_imageData);
 
   //imagedata no longer required in main memory
