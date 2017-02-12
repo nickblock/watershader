@@ -21,6 +21,7 @@ class Texture
 {
 public:
     Texture(const ImageData& imageData);
+    virtual ~Texture();
 
     void bind();
 
@@ -32,7 +33,8 @@ class CubeMap
 {
 public:
     CubeMap(const ImageDataList & imageDataList);
-
+    virtual ~CubeMap();
+    
     void bind();
 
 protected:

@@ -60,17 +60,15 @@ void App::init()
 
 
   _cubeMap = std::make_shared<CubeMap>(_imageData);
-  _texture = std::make_shared<Texture>(_imageData[5]);
+
+  //imagedata no longer required in main memory
+  _imageData.clear();
 
   _heightMap = std::make_shared<HeightMap>(100);
 
   _eyeDist = 50.f;
   _eyePos = glm::vec3(0, 0, _eyeDist);
   _mousePos = glm::vec3(0.5);
-
-  timespec curTime;
-  clock_gettime(CLOCK_MONOTONIC, &curTime);
-  _startTime = (curTime.tv_sec * NS_IN_SEC) + curTime.tv_nsec;
 }
 
 void App::setScreen(int width, int height)
@@ -117,6 +115,8 @@ void App::drawFrame()
 
   void App::touchMove(float x, float y)
   {
+    //clamp the y motion to 0-1
+    //allow the x motion to cycle around
     _mousePos += glm::vec3(x/10.f, -y/10.f, 0.f);
     
     if(_mousePos.x > 1.0f)

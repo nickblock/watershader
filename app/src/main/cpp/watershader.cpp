@@ -235,7 +235,10 @@ WaterShader::WaterShader() {
     }
   }
 }
-
+WaterShader::~WaterShader()
+{
+  glDeleteProgram(_programId);
+}
 void WaterShader::use()
 {
   glUseProgram(_programId);

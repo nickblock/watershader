@@ -55,6 +55,11 @@ HeightMap::HeightMap(int dim)
                GL_STATIC_DRAW);
 
 }
+HeightMap::~HeightMap()
+{
+  glDeleteBuffers(1, &_vbo);
+  glDeleteBuffers(1, &_ibo);
+}
 
 void HeightMap::draw(GLuint posAttribute)
 {

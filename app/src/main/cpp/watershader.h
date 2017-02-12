@@ -13,6 +13,7 @@ class WaterShader {
 
 public:
     WaterShader();
+    virtual ~WaterShader();
 
     void use();
 

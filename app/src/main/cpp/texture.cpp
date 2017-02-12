@@ -23,6 +23,10 @@ Texture::Texture(const ImageData& imageData) {
 
   CHECKGL_ERROR();
 }
+Texture::~Texture()
+{
+  glDeleteTextures(1, &_id);
+}
 void Texture::bind()
 {
   glBindTexture(GL_TEXTURE_2D, _id);
@@ -57,6 +61,10 @@ CubeMap::CubeMap(const ImageDataList & imageDataList) {
   glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 
   CHECKGL_ERROR();
+}
+CubeMap::~CubeMap()
+{
+  glDeleteTextures(1, &_id);
 }
 void CubeMap::bind()
 {

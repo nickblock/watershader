@@ -7,6 +7,7 @@ class HeightMap {
 
 public:
   HeightMap(int dim);
+  virtual ~HeightMap();
 
   void draw(GLuint posAttribute);
   
