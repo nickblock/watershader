@@ -19,11 +19,12 @@ const char* waterFrag = {
   "varying vec3 position;\n"
   "varying vec3 worldNormal;\n"
   "uniform vec3 eyePos;\n"
+  "uniform mat4 rotateView;\n"
   "uniform samplerCube tex;\n"
   "\n"
   "void main() {\n"
   " vec3 eye = normalize(eyePos - position);\n"
-  " vec3 r = reflect(eye, worldNormal);\n"
+  " vec3 r = vec3(rotateView * vec4(reflect(eye, worldNormal), 1.0));\n"
   " vec4 color = textureCube(tex, r);\n"
   " color.a = 1.0;\n"
   " gl_FragColor = color;\n"
@@ -165,23 +166,26 @@ WaterShader::WaterShader() {
   glUseProgram(_programId);
   CHECKGL_ERROR();
 
+  int numWaves = 4;
+
   _posAttribute = glGetAttribLocation(_programId,"in_position");
   _MVPId = glGetUniformLocation(_programId, "MVPMatrix");
   _timeId = glGetUniformLocation(_programId, "time");
   _ampId = glGetUniformLocation(_programId, "in_amp");
   _eyePosId = glGetUniformLocation(_programId, "eyePos");
+  _rotateViewId = glGetUniformLocation(_programId, "rotateView");
 
   GLuint waterHeightId = glGetUniformLocation(_programId, "waterHeight");
   glUniform1f(waterHeightId, 1.f);
   CHECKGL_ERROR();
   GLuint numWavesId = glGetUniformLocation(_programId, "numWaves");
-  glUniform1i(numWavesId, 4);
+  glUniform1i(numWavesId, numWaves);
   CHECKGL_ERROR();
   GLuint envMapId = glGetUniformLocation(_programId, "tex");    
   glUniform1i(envMapId, 0);
   CHECKGL_ERROR();
 
-  for (int i = 0; i < 4; ++i) {
+  for (int i = 0; i < numWaves; ++i) {
     float amplitude = 0.5f / (i + 1);
     {
       std::stringstream ss;
@@ -237,12 +241,13 @@ void WaterShader::use()
   glUseProgram(_programId);
 }
 
-void WaterShader::setUniforms(glm::mat4& mvp, glm::vec3& eyePos, float time, float amplitude)
+void WaterShader::setUniforms(glm::mat4& mvp, glm::vec3& eyePos, float time, float amplitude, glm::mat4& rotateM)
 {
   glUniformMatrix4fv(_MVPId, 1, GL_FALSE, &mvp[0][0]);
   glUniform3f(_eyePosId, eyePos.x, eyePos.y, eyePos.z);
   glUniform1f(_ampId, amplitude);
   glUniform1f(_timeId, time);
+  glUniformMatrix4fv(_rotateViewId, 1, GL_FALSE, &rotateM[0][0]);
 }
 
 GLuint WaterShader::getPosAttr()

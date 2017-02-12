@@ -14,6 +14,8 @@
 #include <memory>
 
 
+typedef long long nsec;
+//singleton class to handle openges effect
 class App
 {
 public:
@@ -51,15 +53,10 @@ protected:
     glm::vec3 _mousePos;
     float     _eyeDist;
 
+    nsec _startTime;
 };
 
-
-
 void CHECKGL_ERROR();
-
-void on_surface_created();
-void on_surface_changed(int width, int height);
-void on_draw_frame();
 
 
 #endif //WATERSHADER_MAIN_H

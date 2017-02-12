@@ -28,6 +28,8 @@ add_library( # Sets the name of the library.
 
 target_include_directories(native-lib PRIVATE
             src/main/cpp/
+
+            #also requires access to the glm library on build machine
             /usr/local/include )
 
 

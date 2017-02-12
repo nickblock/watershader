@@ -9,22 +9,20 @@
 
 HeightMap::HeightMap(int dim)
 {
+  //construct a uniform centered grid with triangle indicdes
   std::vector<glm::vec3> verts((dim+1) * (dim+1));
   std::vector<int> indices(dim * dim * 6);
 
-  float scale = 1.f;//10.f / dim;
-
   float start = -dim/2.f;
 
-  start *= scale;
 
   int index = 0;
   for(int y=0; y<=dim; y++) {
     for(int x=0; x<=dim; x++) {
 
       int vertIndex = (x + y*(dim+1));
-      verts[vertIndex].x = start + (x * scale);
-      verts[vertIndex].y = start + (y * scale);
+      verts[vertIndex].x = start + x;
+      verts[vertIndex].y = start + y;
       verts[vertIndex].z = 0;
 
       if(x != dim && y != dim) {
@@ -41,6 +39,7 @@ HeightMap::HeightMap(int dim)
   }
   _numIndices = indices.size();
 
+  //load the grid data into the gpu
   glGenBuffers(1, &_vbo);
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
   glBufferData(GL_ARRAY_BUFFER, 

@@ -25,11 +25,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private float touchX;
     private float touchY;
 
-    protected void processBitmapAndPassToNative(Bitmap source) {
+    protected void processBitmapAndPassToNative(Bitmap source, float flipX, float flipY) {
 
-        Matrix flipY = new Matrix();
-        flipY.postScale(1, -1, source.getWidth()/2, source.getHeight()/2);
-        Bitmap flippedBm = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), flipY, true);
+        Matrix imageFlipM = new Matrix();
+        imageFlipM.postScale(flipX, flipY, source.getWidth()/2, source.getHeight()/2);
+        Bitmap flippedBm = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), imageFlipM, true);
         ByteBuffer buffer = ByteBuffer.allocate(source.getByteCount());
         flippedBm.copyPixelsToBuffer(buffer);
         byte[] bytes = buffer.array();
@@ -39,17 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        /*
-        setContentView(R.layout.activity_main);
-
-        // Example of a call to a native method
-        TextView tv = (TextView) findViewById(R.id.sample_text);
-        tv.setText(stringFromJNI());
-
-        */
-
 
         ActivityManager activityManager
                 = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -67,12 +56,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             setContentView(glSurfaceView);
 
             //process the 6 bitmap images in order to pass be used for cubemap
-            processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_east));
-            processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_west));
-            processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_up));
-            processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_down));
-            processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_north));
-            processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_south));
+            processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_east), 1.0f, -1.0f);
+            processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_west), 1.0f, -1.0f);
+            processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_down), -1.0f, 1.0f);
+            processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_up), -1.0f, 1.0f);
+            processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_north), 1.0f, -1.0f);
+            processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_south), 1.0f, -1.0f);
 
 
             glSurfaceView.setOnTouchListener(this);

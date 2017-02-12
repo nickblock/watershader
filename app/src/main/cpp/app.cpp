@@ -68,6 +68,9 @@ void App::init()
   _eyePos = glm::vec3(0, 0, _eyeDist);
   _mousePos = glm::vec3(0.5);
 
+  timespec curTime;
+  clock_gettime(CLOCK_MONOTONIC, &curTime);
+  _startTime = (curTime.tv_sec * NS_IN_SEC) + curTime.tv_nsec;
 }
 
 void App::setScreen(int width, int height)
@@ -85,29 +88,41 @@ void App::drawFrame()
 
   glActiveTexture(0);
   _cubeMap->bind();
-  glEnable(GL_TEXTURE_CUBE_MAP);
 
+  //wave amplitude controlled by mouse Y.
   float waveAmp = _mousePos.y;
 
+  //spin the cubemap around
+  glm::mat4 rotateView;
+  rotateView = glm::rotate(rotateView, (float)(_mousePos.x * M_PI* 2.f), glm::vec3(0, 1, 0));
 
+  //create view + projection matrix
   glm::mat4 view = glm::lookAt(_eyePos, _eyePos + glm::vec3(0, 0, -_eyeDist), glm::vec3(0, 1, 0));
-
   glm::mat4 proj = glm::perspectiveFov(M_PI/2.0, (double)_width, (double)_height, 0.5, 1000.0);
-
   glm::mat4 MVP = proj * view;
 
+  //get current time in format float seconds using high res timer
   timespec curTime;
   clock_gettime(CLOCK_MONOTONIC, &curTime);
-  float time = (curTime.tv_sec * NS_IN_SEC + curTime.tv_nsec) / float(NS_IN_SEC);
 
-  _waterShader->setUniforms(MVP, _eyePos, time, waveAmp);
+  double time = (double)curTime.tv_sec + (double)curTime.tv_nsec / 1000000000.0;
 
+  //set shader uniforms
+  _waterShader->setUniforms(MVP, _eyePos, (float)time, waveAmp, rotateView);
+
+  //draw grid usng shder
   _heightMap->draw(_waterShader->getPosAttr());
 
 }
 
   void App::touchMove(float x, float y)
   {
-    _mousePos += glm::vec3(x/10.f, y/10.f, 0.f);
-    _mousePos = glm::max(glm::vec3(0.f), glm::min(glm::vec3(1.0), _mousePos));
+    _mousePos += glm::vec3(x/10.f, -y/10.f, 0.f);
+    
+    if(_mousePos.x > 1.0f)
+      _mousePos.x -= 1.0f;
+    else if(_mousePos.x < 0.0)
+      _mousePos.x += 1.0;
+
+    _mousePos.y = std::max(0.f, std::min(1.f, _mousePos.y));
   }
