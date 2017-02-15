@@ -5,9 +5,9 @@
 #ifndef WATERSHADER_MAIN_H
 #define WATERSHADER_MAIN_H
 
+#include "effect.h"
 #include "watershader.h"
 #include "texture.h"
-#include "heightmap.h"
 
 #include <GLES2/gl2.h>
 #include <vector>
@@ -36,20 +36,12 @@ public:
 
 protected:
 
-
-    std::shared_ptr<WaterShader>    _waterShader;
-    std::shared_ptr<CubeMap>        _cubeMap;
-    std::shared_ptr<Texture>        _texture;
-    std::shared_ptr<HeightMap>      _heightMap;
-
     ImageDataList  _imageData;
     static App* theApp;
 
     int _width, _height;
 
-    glm::vec3 _eyePos;
-    glm::vec3 _mousePos;
-    float     _eyeDist;
+    std::shared_ptr<Effect> _theEffect;
 };
 
 void CHECKGL_ERROR();
