@@ -5,17 +5,14 @@
 #ifndef WATERSHADER_WATERSHADER_H
 #define WATERSHADER_WATERSHADER_H
 
-#include <GLES2/gl2.h>
+#include "shader.h"
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
-class WaterShader {
+class WaterShader : public Shader {
 
 public:
     WaterShader();
-    virtual ~WaterShader();
-
-    void use();
 
     GLuint getPosAttr();
 
@@ -23,7 +20,6 @@ public:
 
 protected:
 
-    GLuint _programId;
     GLuint _posAttribute;
 
     GLuint _MVPId;

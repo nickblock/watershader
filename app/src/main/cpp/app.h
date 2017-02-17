@@ -8,8 +8,8 @@
 #include "effect.h"
 #include "watershader.h"
 #include "texture.h"
+#include "gl_include.h"
 
-#include <GLES2/gl2.h>
 #include <vector>
 #include <memory>
 

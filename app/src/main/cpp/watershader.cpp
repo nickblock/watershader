@@ -8,11 +8,8 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include <cstdlib>
 
 #include <cmath>
-#include <string.h>
-#include <android/log.h>
 
 
 const char* waterFrag = {
@@ -97,74 +94,10 @@ const char* waterVertex = {
   "}\n"
 };
 
-const char* simpleVertex = {
-  "attribute vec3 in_position;\n"
-  "varying vec3 pos;\n"
-  "uniform mat4 MVPMatrix;\n"
-  "void main() {\n"
-  "pos = in_position;\n"
-  "gl_Position = MVPMatrix * vec4(in_position, 1.0);\n"
-  "}\n"
-};
 
-const char* simpleFrag = {
-  "uniform samplerCube tex;\n"
-  "varying vec3 pos;\n"
-  "uniform vec3 eyePos;\n"
-  "void main() {\n"
-  "vec3 normPos = vec3(0.1 * pos.xy + vec2(0.5, 0.5), 1.0);\n"
-  "gl_FragColor = vec4(textureCube(tex, normalize(normPos)).rgb, 1.0);\n"
-  "//gl_FragColor = vec4(texture2D(tex, normPos.xy).xyz, 1.0);\n"
-  "}\n"
-};
-
-void compileStatus(GLuint id)
-{
-  GLint status;
-  glGetShaderiv(id, GL_COMPILE_STATUS, &status);
-  if (status == GL_FALSE) {
-    GLint logLength;
-    glGetShaderiv(id, GL_INFO_LOG_LENGTH, &logLength);
-    GLchar *buffer = new GLchar[logLength];
-    glGetShaderInfoLog(id, logLength, &logLength, buffer);
-    __android_log_print(ANDROID_LOG_INFO, "%s", buffer);
-    delete [] buffer;
-    std::exit(1);
-  }
-}
 WaterShader::WaterShader() {
 
-  _programId = glCreateProgram();
-
-  GLuint vertexId = glCreateShader(GL_VERTEX_SHADER);
-  CHECKGL_ERROR();
-
-  int len = strlen(waterVertex);
-  glShaderSource(vertexId, 1, &waterVertex, &len);
-  CHECKGL_ERROR();
-
-  glCompileShader(vertexId);
-  compileStatus(vertexId);
-  CHECKGL_ERROR();
-  glAttachShader(_programId, vertexId);
-
-  GLuint fragId = glCreateShader(GL_FRAGMENT_SHADER);
-  CHECKGL_ERROR();
-
-  len = strlen(waterFrag);
-  glShaderSource(fragId, 1, &waterFrag, &len);
-  CHECKGL_ERROR();
-
-  glCompileShader(fragId);
-  compileStatus(fragId);
-  CHECKGL_ERROR();
-  glAttachShader(_programId, fragId);
-
-  glLinkProgram(_programId);
-  CHECKGL_ERROR();
-
-  glUseProgram(_programId);
-  CHECKGL_ERROR();
+  compileProgram(waterVertex, waterFrag);
 
   int numWaves = 4;
 
@@ -234,14 +167,6 @@ WaterShader::WaterShader() {
       CHECKGL_ERROR();
     }
   }
-}
-WaterShader::~WaterShader()
-{
-  glDeleteProgram(_programId);
-}
-void WaterShader::use()
-{
-  glUseProgram(_programId);
 }
 
 void WaterShader::setUniforms(glm::mat4& mvp, glm::vec3& eyePos, float time, float amplitude, glm::mat4& rotateM)

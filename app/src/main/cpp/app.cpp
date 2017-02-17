@@ -6,14 +6,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <android/log.h>
 #include <cstdlib>
 
 void CHECKGL_ERROR()
 {
   GLenum err = glGetError();
   if(err != GL_NO_ERROR) {
-    __android_log_print(ANDROID_LOG_INFO, "glError %d %s:%d ", __FILE__, __LINE__);
+    LOG("glError %s:%d ", __FILE__, __LINE__);
     std::exit(1);
   }
 }

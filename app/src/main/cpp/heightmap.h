@@ -1,7 +1,7 @@
 #ifndef HEIGHTMAP_H
 #define HEIGHTMAP_H
 
-#include <GLES2/gl2.h>
+#include "gl_include.h"
 
 class HeightMap {
 

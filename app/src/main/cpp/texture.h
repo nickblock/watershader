@@ -5,7 +5,7 @@
 #ifndef WATERSHADER_TEXTURE_H
 #define WATERSHADER_TEXTURE_H
 
-#include <GLES2/gl2.h>
+#include "gl_include.h"
 #include <vector>
 
 struct ImageData

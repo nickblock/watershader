@@ -55,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             rendererSet = true;
             setContentView(glSurfaceView);
 
+
+        //    processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.mipmap.heart), 1.0f, -1.0f);
+
             //process the 6 bitmap images in order to pass be used for cubemap
             processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_east), 1.0f, -1.0f);
             processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_west), 1.0f, -1.0f);
@@ -62,8 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_up), -1.0f, 1.0f);
             processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_north), 1.0f, -1.0f);
             processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_south), 1.0f, -1.0f);
-
-
+ 
             glSurfaceView.setOnTouchListener(this);
 
         } else {

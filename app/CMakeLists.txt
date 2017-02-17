@@ -22,8 +22,11 @@ add_library( # Sets the name of the library.
              src/main/cpp/native-lib.cpp
              src/main/cpp/app.cpp
              src/main/cpp/texture.cpp
-             src/main/cpp/watershader.cpp
+             src/main/cpp/shader.cpp
              src/main/cpp/watereffect.cpp
+             src/main/cpp/watershader.cpp
+             src/main/cpp/heartshader.cpp
+             src/main/cpp/hearteffect.cpp
              src/main/cpp/heightmap.cpp)
 
 
