@@ -4,6 +4,25 @@
 #include "texture.h"
 #include "app.h"
 
+GLenum getBits(const ImageData& imageData) {
+  int bpp = imageData.data.size() / (imageData.width * imageData.height);
+
+  return bpp == 3 ? GL_RGB : GL_RGBA;
+}
+
+void loadImageGL(GLenum type, const ImageData& imageData) {
+
+  glTexImage2D(type,
+    0,
+    getBits(imageData),
+    imageData.width,
+    imageData.height,
+    0,
+    getBits(imageData),
+    GL_UNSIGNED_BYTE,
+    imageData.data.data());
+}
+
 Texture::Texture(const ImageData& imageData) {
 
   glGenTextures(1, &_id);
@@ -11,15 +30,7 @@ Texture::Texture(const ImageData& imageData) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  glTexImage2D(GL_TEXTURE_2D,
-               0,
-               GL_RGBA,
-               imageData.width,
-               imageData.height,
-               0,
-               GL_RGBA,
-               GL_UNSIGNED_BYTE,
-               imageData.data.data());
+  loadImageGL(GL_TEXTURE_2D, imageData);
 
   CHECKGL_ERROR();
 }
@@ -46,15 +57,7 @@ CubeMap::CubeMap(const ImageDataList & imageDataList) {
   //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_GENERATE_MIPMAP, GL_TRUE);
   for (int i = 0; i < 6; ++i) {
 
-    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-                 0,
-                 GL_RGBA,
-                 imageDataList[i].width,
-                 imageDataList[i].height,
-                 0,
-                 GL_RGBA,
-                 GL_UNSIGNED_BYTE,
-                 imageDataList[i].data.data());
+    loadImageGL(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, imageDataList[i]);
 
     CHECKGL_ERROR();
   }

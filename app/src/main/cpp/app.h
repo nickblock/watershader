@@ -26,7 +26,7 @@ public:
 
     void init();
 
-    void loadImage(signed char* data, int dataSize, int width, int height);
+    void loadImage(const signed char* data, int dataSize, int width, int height);
 
     void setScreen(int width, int height);
 

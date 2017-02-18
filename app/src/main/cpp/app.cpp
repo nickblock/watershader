@@ -19,7 +19,7 @@ void CHECKGL_ERROR()
 
 App* App::theApp = nullptr;
 
-void App::loadImage(signed char* data, int dataSize, int width, int height)
+void App::loadImage(const signed char* data, int dataSize, int width, int height)
 {
   ImageData imageData;
 
