@@ -1,19 +1,20 @@
- //
-// Created by nick on 15/02/17.
+//
+// Created by nick on 18/02/17.
 //
 
-#include "hearteffect.h"
+#include "soundwave.h"
 #include "app.h"
 
-HeartEffect::HeartEffect()
+SoundwaveEffect::SoundwaveEffect()
 {
-  _shader = std::make_shared<HeartShader>();
 
+  _shader = std::make_shared<SoundwaveShader>();
   _heightMap = std::make_shared<HeightMap>(1);
 }
 
-void HeartEffect::drawFrame()
+void SoundwaveEffect::drawFrame()
 {
+
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -24,9 +25,4 @@ void HeartEffect::drawFrame()
   _heightMap->draw(_shader->getPosAttr());
 
   glDisable(GL_BLEND);
-}
-
-void HeartEffect::touchMove(float x, float y)
-{
-
 }

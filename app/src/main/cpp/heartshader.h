@@ -13,7 +13,7 @@ class HeartShader : public Shader{
 public:
   HeartShader();
 
-  void setUniform(int width, int height, float time);
+  void setUniform(float time);
 
 protected:
 

@@ -39,6 +39,8 @@ public:
 
     static float getTime();
 
+    void nextEffect();
+
 protected:
 
     ImageDataList  _imageData;

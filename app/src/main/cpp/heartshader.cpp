@@ -74,7 +74,7 @@ HeartShader::HeartShader()
 }
 
 
-void HeartShader::setUniform(int width, int height, float time)
+void HeartShader::setUniform(float time)
 {
   glUniform1f(_timeId, time);
 }
