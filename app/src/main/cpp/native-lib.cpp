@@ -8,10 +8,10 @@ extern "C"
 {
 
 JNIEXPORT void JNICALL
-Java_com_example_nick_watershader_NativeWrapper_touchMove(JNIEnv *env, jclass type, jfloat x,
+Java_com_example_nick_watershader_NativeWrapper_motionEvent(JNIEnv *env, jclass type, jint eventtype, jfloat x,
                                                           jfloat y) {
 
-    App::get()->touchMove(x, y);
+    App::get()->motionEvent(eventtype, x, y);
 }
 
 JNIEXPORT void JNICALL

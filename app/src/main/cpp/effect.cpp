@@ -3,3 +3,14 @@
 //
 
 #include "effect.h"
+
+Effect::Effect() 
+{
+
+}
+
+void Effect::setScreen(int width, int height)
+{
+  _width = width;
+  _height = height;
+}

@@ -41,7 +41,7 @@ int main(void)
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-  window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+  window = glfwCreateWindow(640, 480, "Hatchbaby", NULL, NULL);
 
   if (!window)
   {
@@ -62,6 +62,8 @@ int main(void)
   imageDataFromFile("data/lostvalley_up.bmp");
   imageDataFromFile("data/lostvalley_north.bmp");
   imageDataFromFile("data/lostvalley_south.bmp");
+
+  imageDataFromFile("data/arrow.bmp");
 
   App::get()->init();
   

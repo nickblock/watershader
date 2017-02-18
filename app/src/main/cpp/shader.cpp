@@ -39,6 +39,7 @@ GLuint compileShader(const char* source, GLenum shaderType)
   return shaderId;
 }
 
+
 void Shader::compileProgram(const char* vertexSource, const char* fragSource)
 {
   _programId = glCreateProgram();
@@ -54,6 +55,9 @@ void Shader::compileProgram(const char* vertexSource, const char* fragSource)
 
   glUseProgram(_programId);
   CHECKGL_ERROR();
+
+  //common uniforms for all our shaders
+  _posAttrId = glGetAttribLocation(_programId,"in_position");
 }
 
 Shader::~Shader()
@@ -64,4 +68,13 @@ Shader::~Shader()
 void Shader::use()
 {
   glUseProgram(_programId);
+}
+GLuint Shader::id()
+{
+  return _programId;
+}
+
+GLuint Shader::getPosAttr()
+{
+  return _posAttrId;
 }

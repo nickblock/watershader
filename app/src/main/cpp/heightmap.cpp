@@ -6,13 +6,24 @@
 
 #include <vector>
 
+const float defaultQuad[] = {
+  -0.5, -0.5, 0.0,
+  -0.5, 0.5, 0.0,
+   0.5, 0.5, 0.0,
+   0.5, -0.5, 0.0
+};
+
+const int defaultQuadIndices[] = {
+  0, 1, 2, 0, 2, 3
+};
+
 HeightMap::HeightMap(int dim)
 {
   //construct a uniform centered grid with triangle indicdes
   std::vector<glm::vec3> verts((dim+1) * (dim+1));
   std::vector<int> indices(dim * dim * 6);
 
-  float start = -dim/2.f;
+  float start = -dim;
 
 
   int index = 0;
@@ -20,8 +31,8 @@ HeightMap::HeightMap(int dim)
     for(int x=0; x<=dim; x++) {
 
       int vertIndex = (x + y*(dim+1));
-      verts[vertIndex].x = start + x;
-      verts[vertIndex].y = start + y;
+      verts[vertIndex].x = start + (x * 2.f);
+      verts[vertIndex].y = start + (y * 2.f);
       verts[vertIndex].z = 0;
 
       if(x != dim && y != dim) {
@@ -75,4 +86,7 @@ void HeightMap::draw(GLuint posAttribute)
     GL_UNSIGNED_INT, 
     (void*)0
   );
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

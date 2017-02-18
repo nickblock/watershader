@@ -6,8 +6,9 @@
 #define WATERSHADER_MAIN_H
 
 #include "effect.h"
-#include "watershader.h"
+#include "bgshader.h"
 #include "texture.h"
+#include "heightmap.h"
 #include "gl_include.h"
 
 #include <vector>
@@ -32,7 +33,11 @@ public:
 
     void drawFrame();
 
+    void motionEvent(int type, float x, float y);
+
     void touchMove(float x, float y);
+
+    static float getTime();
 
 protected:
 
@@ -40,8 +45,14 @@ protected:
     static App* theApp;
 
     int _width, _height;
+    float touchX, touchY;
 
-    std::shared_ptr<Effect> _theEffect;
+    std::vector<std::shared_ptr<Effect>> _effectList;
+
+    std::shared_ptr<BgShader> _bgShader;
+    std::shared_ptr<HeightMap> _quad;
+
+    int _currentEffect;
 };
 
 void CHECKGL_ERROR();

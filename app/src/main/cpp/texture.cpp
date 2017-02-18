@@ -45,7 +45,7 @@ void Texture::bind()
 
 CubeMap::CubeMap(const ImageDataList & imageDataList) {
 
-  assert(imageDataList.size() == 6);
+  assert(imageDataList.size() >= 6);
 
   glGenTextures(1, &_id);
   glBindTexture(GL_TEXTURE_CUBE_MAP, _id);
@@ -72,4 +72,74 @@ CubeMap::~CubeMap()
 void CubeMap::bind()
 {
   glBindTexture(GL_TEXTURE_CUBE_MAP, _id);
+}
+
+const char* textureVertex = {
+  "attribute vec3 in_position;\n"
+  "attribute vec2 in_uv;\n"
+  "varying vec2 uv;\n"
+  "void main() {\n"
+  "uv = in_uv;\n"
+  "gl_Position = vec4(in_position, 1.0);\n"
+  "}\n"
+};
+
+const char* textureFrag = {
+  "uniform sampler2D tex;\n"
+  "varying vec2 uv;\n"
+  "void main() {\n"
+  " gl_FragColor = texture2D(tex, uv);\n"
+  "}\n"
+};
+
+
+TextureEffect::TextureEffect(const ImageData& imageData, float posX, float posY, float endX, float endY)
+{
+  _texture = std::make_shared<Texture>(imageData);
+
+  _shader = std::make_shared<Shader>();
+  _shader->compileProgram(textureVertex, textureFrag);
+
+  _posAttr = glGetAttribLocation(_shader->id(),"in_position");
+  _uvAttr = glGetAttribLocation(_shader->id(),"in_uv");
+  
+  _uvs.push_back(glm::vec2(0.0f, 0.0f));
+  _uvs.push_back(glm::vec2(0.0f, 1.0f));
+  _uvs.push_back(glm::vec2(1.0f, 1.0f));
+  _uvs.push_back(glm::vec2(1.0f, 0.0f));
+  
+  _pos.push_back(glm::vec3(posX, posY, 0.0));
+  _pos.push_back(glm::vec3(posX, endY, 0.0));
+  _pos.push_back(glm::vec3(endX, endY, 0.0));
+  _pos.push_back(glm::vec3(endX, posY, 0.0));
+
+  _indices.push_back(0);
+  _indices.push_back(1);
+  _indices.push_back(2);
+  _indices.push_back(0);
+  _indices.push_back(2);
+  _indices.push_back(3);
+}
+
+void TextureEffect::drawFrame()
+{
+  _shader->use();
+
+  glActiveTexture(0);
+  _texture->bind();
+
+
+  glEnableVertexAttribArray(_posAttr);
+  glVertexAttribPointer(_posAttr,3,GL_FLOAT,GL_FALSE,0,_pos.data());
+
+  glEnableVertexAttribArray(_uvAttr);
+  glVertexAttribPointer(_uvAttr,2,GL_FLOAT,GL_FALSE,0,_uvs.data());
+
+
+  glDrawElements(
+    GL_TRIANGLES,
+    6, 
+    GL_UNSIGNED_INT, 
+    (void*)_indices.data()
+  );
 }

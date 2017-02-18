@@ -18,4 +18,7 @@ protected:
   int _numIndices;
 };
 
+extern const float defaultQuad[];
+extern const int   defaultQuadIndices[];
+
 #endif

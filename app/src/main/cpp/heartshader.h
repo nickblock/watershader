@@ -8,10 +8,16 @@
 
 #include "shader.h"
 
-class HeartShader {
+class HeartShader : public Shader{
   
 public:
   HeartShader();
+
+  void setUniform(int width, int height, float time);
+
+protected:
+
+  GLuint _timeId;
 };
 
 

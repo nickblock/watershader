@@ -86,11 +86,11 @@ const char* waterVertex = {
   "}\n"
   "\n"
   "void main() {\n"
-  " vec4 pos = vec4(in_position, 1.0);\n"
+  " vec4 pos = vec4(0.5 * in_position, 1.0);\n"
   " pos.z = waterHeight + waveHeight(pos.x, pos.y);\n"
   " position = pos.xyz / pos.w;\n"
   " worldNormal = waveNormal(pos.x, pos.y);\n"
-  " gl_Position = MVPMatrix * pos;\n"
+  " gl_Position = MVPMatrix* pos;\n"
   "}\n"
 };
 
@@ -101,7 +101,6 @@ WaterShader::WaterShader() {
 
   int numWaves = 4;
 
-  _posAttribute = glGetAttribLocation(_programId,"in_position");
   _MVPId = glGetUniformLocation(_programId, "MVPMatrix");
   _timeId = glGetUniformLocation(_programId, "time");
   _ampId = glGetUniformLocation(_programId, "in_amp");
@@ -176,9 +175,4 @@ void WaterShader::setUniforms(glm::mat4& mvp, glm::vec3& eyePos, float time, flo
   glUniform1f(_ampId, amplitude);
   glUniform1f(_timeId, time);
   glUniformMatrix4fv(_rotateViewId, 1, GL_FALSE, &rotateM[0][0]);
-}
-
-GLuint WaterShader::getPosAttr()
-{
-  return _posAttribute;
 }

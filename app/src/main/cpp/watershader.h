@@ -14,19 +14,15 @@ class WaterShader : public Shader {
 public:
     WaterShader();
 
-    GLuint getPosAttr();
-
     void setUniforms(glm::mat4& mvp, glm::vec3& eyePos, float time, float amplitude, glm::mat4& rotateM);
 
 protected:
 
-    GLuint _posAttribute;
-
-    GLuint _MVPId;
     GLuint _eyePosId;
     GLuint _timeId;
     GLuint _ampId;
     GLuint _rotateViewId;
+    GLuint _MVPId;
 };
 
 

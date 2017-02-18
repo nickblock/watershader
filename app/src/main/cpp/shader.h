@@ -17,8 +17,13 @@ public:
 
   void use();
 
+  GLuint getPosAttr();
+  GLuint id();
+  
 protected:
   GLuint _programId;
+  GLuint _posAttrId;
+
 };
 
 

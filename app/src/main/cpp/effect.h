@@ -5,16 +5,28 @@
 #ifndef WATERSHADER_EFFECT_H
 #define WATERSHADER_EFFECT_H
 
+#include <memory>
+
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 class Effect {
 
 public:
 
-  virtual void setScreen(int width, int height) = 0;
+  Effect();
+
+  virtual void setScreen(int width, int height);
 
   virtual void drawFrame() = 0;
 
-  virtual void touchMove(float x, float y) = 0;
+  virtual void touchMove(float x, float y) {};
+
+protected:
+  int _width, _height;
+
 
 };
 

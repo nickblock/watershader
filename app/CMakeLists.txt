@@ -27,7 +27,9 @@ add_library( # Sets the name of the library.
              src/main/cpp/watershader.cpp
              src/main/cpp/heartshader.cpp
              src/main/cpp/hearteffect.cpp
-             src/main/cpp/heightmap.cpp)
+             src/main/cpp/heightmap.cpp
+             src/main/cpp/effect.cpp
+             src/main/cpp/bgshader.cpp)
 
 
 target_include_directories(native-lib PRIVATE

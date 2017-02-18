@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             setContentView(glSurfaceView);
 
 
-        //    processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.mipmap.heart), 1.0f, -1.0f);
 
             //process the 6 bitmap images in order to pass be used for cubemap
             processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_east), 1.0f, -1.0f);
@@ -65,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_up), -1.0f, 1.0f);
             processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_north), 1.0f, -1.0f);
             processBitmapAndPassToNative(BitmapFactory.decodeResource(getResources(), R.drawable.lostvalley_south), 1.0f, -1.0f);
+
  
             glSurfaceView.setOnTouchListener(this);
 
@@ -108,21 +108,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
+
         if(event.getActionIndex() == 0) {
-            if(event.getAction() == MotionEvent.ACTION_DOWN)
-            {
-                touchX = event.getX();
-                touchY = event.getY();
-            }
-            else if(event.getAction() == MotionEvent.ACTION_MOVE) {
-                float moveX = event.getX() - touchX;
-                float moveY = event.getY() - touchY;
 
-                NativeWrapper.touchMove(moveX * 0.01f, moveY * 0.01f);
+            NativeWrapper.motionEvent(event.getAction(), event.getX(), event.getY());
 
-                touchX = event.getX();
-                touchY = event.getY();
-            }
         }
         return true;
     }

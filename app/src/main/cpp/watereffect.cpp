@@ -3,11 +3,9 @@
 //
 
 #include "watereffect.h"
-
+#include "app.h"
 #include <cmath>
 
-#include <time.h>
-#define NS_IN_SEC 1000000000
 
 WaterEffect::WaterEffect(const ImageDataList& imageData)
 {
@@ -23,18 +21,8 @@ WaterEffect::WaterEffect(const ImageDataList& imageData)
   _mousePos = glm::vec3(0.5);
 }
 
-void WaterEffect::setScreen(int width, int height)
-{
-  _width = width;
-  _height = height;
-}
-
 void WaterEffect::drawFrame()
 {
-  _waterShader->use();
-
-  glActiveTexture(0);
-  _cubeMap->bind();
 
   //wave amplitude controlled by mouse Y.
   float waveAmp = _mousePos.y;
@@ -47,15 +35,14 @@ void WaterEffect::drawFrame()
   glm::mat4 view = glm::lookAt(_eyePos, _eyePos + glm::vec3(0, 0, -_eyeDist), glm::vec3(0, 1, 0));
   glm::mat4 proj = glm::perspectiveFov(M_PI/2.0, (double)_width, (double)_height, 0.5, 1000.0);
   glm::mat4 MVP = proj * view;
+  
+  _waterShader->use();
 
-  //get current time in format float seconds using high res timer
-  timespec curTime;
-  clock_gettime(CLOCK_MONOTONIC, &curTime);
-
-  double time = (double)curTime.tv_sec + (double)curTime.tv_nsec / 1000000000.0;
+  glActiveTexture(0);
+  _cubeMap->bind();
 
   //set shader uniforms
-  _waterShader->setUniforms(MVP, _eyePos, (float)time, waveAmp, rotateView);
+  _waterShader->setUniforms(MVP, _eyePos, (float)App::getTime(), waveAmp, rotateView);
 
   //draw grid usng shder
   _heightMap->draw(_waterShader->getPosAttr());
