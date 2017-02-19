@@ -58,6 +58,21 @@ void App::init()
   glDisable(GL_DEPTH_TEST);
 
   _currentEffect = 0;
+
+  _gradients.push_back(Gradient(
+    glm::vec3(102/255.f, 200/255.f, 209/255.f), 
+    glm::vec3(158/255.f, 160/255.f, 240/255.f)
+  )); 
+
+  _gradients.push_back(Gradient(
+    glm::vec3(111/255.f, 210/255.f, 210/255.f),
+    glm::vec3(255/255.f, 255/255.f, 115/255.f)
+  )); 
+
+  _gradients.push_back(Gradient(
+    glm::vec3(255/255.f, 117/255.f, 101/255.f),
+    glm::vec3(156/255.f, 159/255.f, 240/255.f)
+  )); 
 }
 
 void App::setScreen(int width, int height)
@@ -73,8 +88,10 @@ void App::drawFrame()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+  Gradient& gradient = _gradients[2];
+
   _bgShader->use();
-  _bgShader->setUniform(glm::vec3(102/255.f, 200/255.f, 209/255.f), glm::vec3(158/255.f,160/255.f,240/255.f));
+  _bgShader->setUniform(gradient.first, gradient.second);
   _quad->draw(_bgShader->getPosAttr());
 
   _effectList[_currentEffect]->drawFrame();

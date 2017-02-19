@@ -55,6 +55,11 @@ protected:
     std::shared_ptr<HeightMap> _quad;
 
     int _currentEffect;
+
+
+    using Gradient = std::pair<glm::vec3, glm::vec3>;
+
+    std::vector<Gradient> _gradients;
 };
 
 void CHECKGL_ERROR();
