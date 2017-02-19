@@ -5,7 +5,7 @@
 #include "watereffect.h"
 #include "app.h"
 #include <cmath>
-
+#include <algorithm>
 
 WaterEffect::WaterEffect(const ImageDataList& imageData)
 {

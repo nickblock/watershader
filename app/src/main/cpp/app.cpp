@@ -13,6 +13,9 @@
 #include <time.h>
 #define NS_IN_SEC 1000000000
 
+#ifdef WIN32
+#include "time_win.h"
+#endif
 const int Android_Action_Move = 2;
 const int Android_Action_Down = 0;
 const int Android_Action_Up = 1;
@@ -123,11 +126,18 @@ void App::nextEffect()
 float App::getTime()
 {
 
+#ifndef WIN32
   //get current time in format float seconds using high res timer
   timespec curTime;
   clock_gettime(CLOCK_MONOTONIC, &curTime);
 
   double time = (double)curTime.tv_sec + (double)curTime.tv_nsec / 1000000000.0;
+#else
+  timeval curTime;
+  clock_gettime(CLOCK_MONOTONIC, &curTime);
+
+  double time = (double)curTime.tv_sec + (double)curTime.tv_usec / 1000000.0;
+#endif
 
   return time;
 }

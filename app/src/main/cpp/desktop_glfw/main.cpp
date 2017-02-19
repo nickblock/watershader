@@ -58,6 +58,9 @@ int main(void)
   glfwSetWindowSizeCallback(window, window_size_callback);
   glfwSetKeyCallback(window, key_callback);
   glfwMakeContextCurrent(window);
+#ifdef WIN32
+  gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+#endif
   glfwSwapInterval(1);
 
   imageDataFromFile("data/lostvalley_east.bmp");
@@ -67,14 +70,15 @@ int main(void)
   imageDataFromFile("data/lostvalley_north.bmp");
   imageDataFromFile("data/lostvalley_south.bmp");
 
-  imageDataFromFile("data/arrow.bmp");
-
-  App::get()->init();
-  
-  App::get()->setScreen(640, 480);
+  bool init = false;
 
   while (!glfwWindowShouldClose(window))
   {
+    if(!init) {
+      App::get()->init();
+      App::get()->setScreen(640, 480);
+      init = true;
+    }
 
     App::get()->drawFrame();
     glfwSwapBuffers(window);
