@@ -88,7 +88,7 @@ void App::drawFrame()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  Gradient& gradient = _gradients[2];
+  Gradient& gradient = _gradients[0];
 
   _bgShader->use();
   _bgShader->setUniform(gradient.first, gradient.second);

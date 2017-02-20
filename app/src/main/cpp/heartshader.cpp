@@ -53,15 +53,15 @@ const char* heartFrag = {
   "vec2 p2 = 45.0 * (normPos.xy);\n"
   "\n"
   "vec3 col = vec3(0.0, 0.0, 0.0);\n"
-  "vec3 col1 = mix(vec3(1.0,0.0,0.6), vec3(1.0,0.0,0.4), sqrt(p.y));\n"
-  "vec3 col2 = mix(vec3(1.0,0.0,0.1), vec3(1.0,0.1,0.0), pow(p.y, 1.3));\n"
+  "vec3 col1 = mix(vec3(1.0,1.0,1.0), vec3(1.0,1.0,1.0), sqrt(p.y));\n"
+  "vec3 col2 = mix(vec3(1.0,1.0,1.0), vec3(1.0,1.0,1.0), pow(p.y, 1.3));\n"
   "\n"
   "float x = p.x - 2.0;\n"
   "float y = p.y - 1.65;\n"
   
   "col = paintSpecialHeart(col, col1, x, y);\n"
   "\n"
-  "gl_FragColor = vec4(col, max(col.r, max(col.g, col.b)));\n"
+  "gl_FragColor = vec4(1.0, 1.0, 1.0, col.r);\n"
   "}\n"
 };
 

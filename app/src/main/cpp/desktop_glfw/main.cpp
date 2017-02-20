@@ -2,8 +2,18 @@
 #include <GLFW/glfw3.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <vector>
+#include <fstream>
 #include "app.h"
 #include "bitmap.h"
+
+struct Sample {
+  float peakDecay;
+  float averageDecay;
+  float peak;
+  float timeStamp;
+  float average;
+};
 
 void imageDataFromFile(const char* filename)
 {
@@ -71,6 +81,18 @@ int main(void)
   imageDataFromFile("data/lostvalley_south.bmp");
 
   bool init = false;
+
+  std::fstream sampleflie("data/samples.bin");
+
+  std::vector<Sample> samples;
+  while(!sampleflie.eof()) {
+    Sample sample;
+
+    sampleflie.read((char*)&sample, sizeof(Sample));
+
+    samples.push_back(sample);
+  }
+
 
   while (!glfwWindowShouldClose(window))
   {
