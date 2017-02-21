@@ -7,7 +7,7 @@
 
 #include "effect.h"
 #include "heightmap.h"
-#include "soundwaveshader.h"
+#include "shader.h"
 
 class SoundwaveEffect : public Effect {
 public:
@@ -16,8 +16,13 @@ public:
   virtual void drawFrame();
 
 protected:
-  std::shared_ptr<SoundwaveShader> _shader;
-  std::shared_ptr<HeightMap>      _heightMap;
+  std::shared_ptr<Shader>     _shader;
+  std::shared_ptr<HeightMap>  _heightMap;
+
+  GLuint _timeId;
+  GLuint _pixelWidthId;
+  GLuint _pixelHeightId;
+
 };
 
 

@@ -11,7 +11,6 @@ add_executable(HatchBaby
   "${CMAKE_CURRENT_SOURCE_DIR}/../app.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/../effect.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/../hearteffect.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/../heartshader.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/../heightmap.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/../shader.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/../texture.cpp"
@@ -19,7 +18,6 @@ add_executable(HatchBaby
   "${CMAKE_CURRENT_SOURCE_DIR}/../watershader.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/../bgshader.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/../soundwave.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/../soundwaveshader.cpp"
   bitmap.c
   main.cpp
 )

@@ -8,7 +8,7 @@
 #include "effect.h"
 #include "texture.h"
 #include "heightmap.h"
-#include "heartshader.h"
+#include "shader.h"
 
 class HeartEffect : public Effect{
 
@@ -21,8 +21,10 @@ public:
   virtual void touchMove(float x, float y);
 protected:
 
-  std::shared_ptr<HeartShader>    _shader;
-  std::shared_ptr<HeightMap>      _heightMap;
+  std::shared_ptr<Shader>     _shader;
+  std::shared_ptr<HeightMap>  _heightMap;
+
+  GLuint _timeId;
 };
 
 
