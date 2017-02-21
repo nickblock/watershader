@@ -46,7 +46,7 @@ const char* heartFrag = {
   "}\n"
 
   "void main() {\n"
-  "vec3 normPos = vec3(pos.xy + vec2(0.5, 0.5), 1.0);\n"
+  "vec2 normPos = 0.5*pos.xy + vec2(0.5, 0.5);\n"
 
   "vec2 p = 4.0 * (normPos.xy);\n"
   "vec2 p2 = 45.0 * (normPos.xy);\n"

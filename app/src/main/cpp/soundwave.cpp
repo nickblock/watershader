@@ -50,7 +50,7 @@ const char* soundFrag = {
 "                      vec2(-pixelWidth/2.0, pixelHeight/2.0),\n" 
 "                      vec2(pixelWidth/2.0, pixelHeight/2.0), \n"
 "                      vec2(pixelWidth/2.0, -pixelHeight/2.0)};\n"
-"  vec2 uvTrue = pos.xy + vec2(0.5, 0.5);\n"
+"  vec2 uvTrue = 0.5*pos.xy + vec2(0.5, 0.5);\n"
 "  vec2 uv = -1.0 + 2.0 * uvTrue;\n"
 "  float curve = sin((uv.x + time)*freq);\n"
 "  vec3 color = vec3(1.0);\n"
