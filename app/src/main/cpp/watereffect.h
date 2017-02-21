@@ -30,7 +30,7 @@ protected:
   std::shared_ptr<HeightMap>      _heightMap;
 
 
-  glm::vec3 _mousePos;
+  glm::vec2 _mousePos;
   float     _eyeDist;
   glm::vec3 _eyePos;
 };

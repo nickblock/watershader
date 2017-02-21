@@ -5,6 +5,7 @@
 #include "watereffect.h"
 #include "hearteffect.h"
 #include "soundwave.h"
+#include "smokeeffect.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -52,12 +53,14 @@ void App::init()
 
   _effectList.push_back(std::shared_ptr<Effect>(new WaterEffect(_imageData)));
 
+  _effectList.push_back(std::shared_ptr<Effect>(new SmokeEffect(0, 0)));
+
   _bgShader = std::make_shared<BgShader>();
   _quad = std::make_shared<HeightMap>(1);
 
   glDisable(GL_DEPTH_TEST);
 
-  _currentEffect = 0;
+  _currentEffect = 3;
 
   _gradients.push_back(Gradient(
     glm::vec3(102/255.f, 200/255.f, 209/255.f), 

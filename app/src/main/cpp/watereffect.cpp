@@ -18,7 +18,7 @@ WaterEffect::WaterEffect(const ImageDataList& imageData)
 
   _eyeDist = 50.f;
   _eyePos = glm::vec3(0, 0, _eyeDist);
-  _mousePos = glm::vec3(0.5);
+  _mousePos = glm::vec2(0.5);
 }
 
 void WaterEffect::drawFrame()
@@ -53,7 +53,7 @@ void WaterEffect::touchMove(float x, float y)
 {
     //clamp the y motion to 0-1
     //allow the x motion to cycle around
-    _mousePos += glm::vec3(x/10.f, -y/10.f, 0.f);
+    _mousePos += glm::vec2(x/10.f, -y/10.f);
     
     if(_mousePos.x > 1.0f)
       _mousePos.x -= 1.0f;

@@ -113,9 +113,9 @@ WaterShader::WaterShader() {
   GLuint numWavesId = glGetUniformLocation(_programId, "numWaves");
   glUniform1i(numWavesId, numWaves);
   CHECKGL_ERROR();
-  GLuint envMapId = glGetUniformLocation(_programId, "tex");    
-  glUniform1i(envMapId, 0);
-  CHECKGL_ERROR();
+  // GLuint envMapId = glGetUniformLocation(_programId, "tex");    
+  // glUniform1i(envMapId, 0);
+  // CHECKGL_ERROR();
 
   for (int i = 0; i < numWaves; ++i) {
     float amplitude = 0.5f / (i + 1);

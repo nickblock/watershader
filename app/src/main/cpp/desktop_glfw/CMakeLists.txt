@@ -18,6 +18,8 @@ add_executable(HatchBaby
   "${CMAKE_CURRENT_SOURCE_DIR}/../watershader.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/../bgshader.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/../soundwave.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../smokeeffect.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../framebuffer.cpp"
   bitmap.c
   main.cpp
 )
