@@ -20,8 +20,8 @@ protected:
   std::shared_ptr<HeightMap>  _heightMap;
 
   GLuint _timeId;
-  GLuint _pixelWidthId;
-  GLuint _pixelHeightId;
+  GLuint _lineWidthsId;
+  GLuint _amplitudesId;
 
 };
 

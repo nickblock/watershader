@@ -18,51 +18,42 @@ const char* soundVertex = {
 
 const char* soundFrag = {
 
-  "varying vec3 pos;\n"
+"varying vec3 pos;\n"
 #ifdef DESKTOP_BUILD
-  "uniform float time;\n"
+"uniform float time;\n"
 #else
-  "uniform highp float time;\n"
+"uniform highp float time;\n"
 #endif
-"uniform float pixelWidth;\n"
-"uniform float pixelHeight;\n"
+
+"uniform float lineWidths[4];\n"
+"uniform float amplitudes[4];\n"
+
 "float iChannel = 0.5;\n"
 "float squared(float value) { return value * value; }\n"
 "float getAmp(float frequency) { return iChannel; }\n"
 "float getWeight(float f) {\n"
-"    return (+ getAmp(f-2.0) + getAmp(f-1.0) + getAmp(f+2.0) + getAmp(f+1.0) + getAmp(f)) / 5.0; }\n"
-"\n"
+"    return (+ getAmp(f-2.0) + getAmp(f-1.0) + getAmp(f+2.0) + getAmp(f+1.0) + getAmp(f)) / 5.0;\n"
+"}\n"
 "vec3 quantize(vec3 c, float num)\n"
 "{\n"
-" return floor((c/num)*10.0)*num/10.0;"
+" return floor((c/num)*10.0)*num/10.0;\n"
 "}\n"
 "float quantize(float c, float num)\n"
 "{\n"
-" return floor((c/num)*10.0)*num/10.0;"
+" return floor((c/num)*10.0)*num/10.0;\n"
 "}\n"
+""
+"void main() {\n"
 
-"void main()\n"
-"{\n"
 "  float freq = 3.0;\n"
-"  float lineWidths[4] = {0.05, 0.01, 0.01, 0.01};\n"
-"  float amplitudes[4] = {0.5, 0.4, 0.3, 0.2};\n"
-"  vec2 samples[4] = {vec2(-pixelWidth/2.0, -pixelHeight/2.0),\n" 
-"                      vec2(-pixelWidth/2.0, pixelHeight/2.0),\n" 
-"                      vec2(pixelWidth/2.0, pixelHeight/2.0), \n"
-"                      vec2(pixelWidth/2.0, -pixelHeight/2.0)};\n"
 "  vec2 uvTrue = 0.5*pos.xy + vec2(0.5, 0.5);\n"
 "  vec2 uv = -1.0 + 2.0 * uvTrue;\n"
 "  float curve = sin((uv.x + time)*freq);\n"
 "  vec3 color = vec3(1.0);\n"
 "  float tr = 0.0f;\n"
-"  for(int s=0; s<4; s++) {\n"
-"    vec2 sampleUV = uv + samples[s];\n"
-"    float curveSamp = 0.0;\n"
-"    for(int i=0; i<4; i++) {\n"
-"      float thisCurve = curve * amplitudes[i];\n"
-"      curveSamp += thisCurve > uv.y - lineWidths[i] &&  thisCurve < uv.y + lineWidths[i] ? 1.0 : 0.0;\n"
-"    }\n"
-"    tr = curveSamp / 4.0;"
+"  for(int i=0; i<4; i++) {\n"
+"    float thisCurve = curve * amplitudes[i];\n"
+"    tr += thisCurve > uv.y - lineWidths[i] &&  thisCurve < uv.y + lineWidths[i] ? 1.0 : 0.0;\n"
 "  }\n"
 "  gl_FragColor = vec4(color, tr);\n"
 "}\n"
@@ -102,8 +93,8 @@ SoundwaveEffect::SoundwaveEffect()
   _shader->compileProgram(soundVertex, soundFrag);
 
   _timeId = glGetUniformLocation(_shader->id(), "time");
-  _pixelWidthId = glGetUniformLocation(_shader->id(), "pixelWidth");
-  _pixelHeightId = glGetUniformLocation(_shader->id(), "pixelHeight");
+  _lineWidthsId = glGetUniformLocation(_shader->id(), "lineWidths");
+  _amplitudesId = glGetUniformLocation(_shader->id(), "amplitudes");
 
   _heightMap = std::make_shared<HeightMap>(1);
 }
@@ -116,9 +107,12 @@ void SoundwaveEffect::drawFrame()
 
   _shader->use();
 
+  float lineWidths[] = {0.05, 0.01, 0.01, 0.01};
+  float amplitudes[] = {0.5, 0.4, 0.3, 0.2};
+
   glUniform1f(_timeId, App::getTime());
-  glUniform1f(_pixelWidthId, _width/1.f);
-  glUniform1f(_pixelHeightId, _height/1.f);
+  glUniform1fv(_lineWidthsId, 4, lineWidths);
+  glUniform1fv(_amplitudesId, 4, amplitudes);
 
   //draw grid usng shder
   _heightMap->draw(_shader->getPosAttr());
