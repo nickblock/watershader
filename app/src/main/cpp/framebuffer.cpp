@@ -1,6 +1,7 @@
 #include "framebuffer.h"
 #include "app.h"
 
+
 FrameBuffer::FrameBuffer(int width, int height) : 
   _inited(false),
   _width(width),
@@ -24,7 +25,7 @@ void FrameBuffer::resize(int width, int height)
   glGenTextures(1, &_colorId);
   glBindTexture(GL_TEXTURE_2D, _colorId);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,  width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
   std::vector<GLbyte> bytes(width*height*4, 0);
   glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,bytes.data());
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _colorId, 0);
@@ -36,7 +37,7 @@ void FrameBuffer::resize(int width, int height)
 
   GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
   if(status != GL_FRAMEBUFFER_COMPLETE) {
-      LOG("failed to make complete framebuffer object %x", status);
+      assert(0);
       destroy();
   }
   else {

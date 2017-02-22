@@ -24,6 +24,7 @@ protected:
 
   GLuint _resId;
   GLuint _smokeSourceId;
+  GLuint _sourceSizeId;
   GLuint _timeId;
 
   bool _flipFlop;

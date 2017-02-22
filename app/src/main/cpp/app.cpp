@@ -47,9 +47,9 @@ void App::init()
 {
   glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 
-  _effectList.push_back(std::shared_ptr<Effect>(new SoundwaveEffect()));
-
   _effectList.push_back(std::shared_ptr<Effect>(new HeartEffect()));
+
+  _effectList.push_back(std::shared_ptr<Effect>(new SoundwaveEffect()));
 
   _effectList.push_back(std::shared_ptr<Effect>(new WaterEffect(_imageData)));
 

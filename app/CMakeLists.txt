@@ -29,7 +29,9 @@ add_library( # Sets the name of the library.
              src/main/cpp/heightmap.cpp
              src/main/cpp/effect.cpp
              src/main/cpp/bgshader.cpp
-             src/main/cpp/soundwave.cpp)
+             src/main/cpp/soundwave.cpp
+             src/main/cpp/smokeeffect.cpp
+             src/main/cpp/framebuffer.cpp)
 
 
 target_include_directories(native-lib PRIVATE

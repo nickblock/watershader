@@ -15,41 +15,33 @@ const char* smokeFrag = {
 "  uniform sampler2D bufferTexture;//Our input texture\n"
 "  uniform vec3 smokeSource;//The x,y are the posiiton. The z is the power/density\n"
 "  uniform float time;\n"
+"  uniform float sourceSize;\n"
 "  varying vec3 pos;\n"
 "  void main() {\n"
-"         vec2 uvTrue = 0.5*pos.xy + vec2(0.5, 0.5);\n"
-"         vec2 uv = -1.0 + 2.0 * uvTrue;\n"
-"        vec2 pixel = uvTrue * res;\n"
+"    vec2 uv = 0.5*pos.xy + vec2(0.5, 0.5);\n"
+"    vec2 pixel = uv * res;\n"
+"\n"     
+"    gl_FragColor = texture2D( bufferTexture, uv );\n"
+"\n"       
+"    float dist = distance(smokeSource.xy, pixel);\n"
+"    gl_FragColor.rgb += smokeSource.z * max(sourceSize-dist,0.0);\n"
+"    gl_FragColor.a = 1.0;\n"
 "\n"
-"        float dist = distance(smokeSource.xy,pixel.xy);\n"
-"\n"
-"        gl_FragColor = texture2D( bufferTexture, uvTrue );\n"
-"\n"
-"        //Generate smoke when mouse is pressed\n"
-"    gl_FragColor.rgb += smokeSource.z * max(15.0-dist,0.0);\n"
-"     return;\n"
-"    //Generate fixed smoke (this is the little point moving around in the center)\n"
-"    vec2 smokePoint = vec2(res.x/2.0+100.0*sin(time),res.y/2.0+cos(time*3.5)*20.0);\n"
-"    dist = distance(smokePoint,gl_FragCoord.xy);\n"
-"    gl_FragColor.rgb += 0.01 * max(15.0-dist,0.0);\n"
-"\n"
-"        //Smoke diffuse\n"
-"        float xPixel = 1.0/res.x;//The size of a single pixel\n"
-"        float yPixel = 1.0/res.y;\n"
-"        vec4 rightColor = texture2D(bufferTexture,vec2(pixel.x+xPixel,pixel.y));\n"
-"        vec4 leftColor = texture2D(bufferTexture,vec2(pixel.x-xPixel,pixel.y));\n"
-"        vec4 upColor = texture2D(bufferTexture,vec2(pixel.x,pixel.y+yPixel));\n"
-"        vec4 downColor = texture2D(bufferTexture,vec2(pixel.x,pixel.y-yPixel));\n"
-"        //Handle the bottom boundary\n"
-"    if(pixel.y <= yPixel){\n"
-"      downColor.rgb = vec3(0.0);\n"
+"    //Smoke diffuse\n"
+"    float xPixel = 1.0/res.x;//The size of a single pixel\n"
+"    float yPixel = 1.0/res.y;\n"
+"    vec4 rightColor = texture2D(bufferTexture,vec2(uv.x+xPixel,uv.y));\n"
+"    vec4 leftColor = texture2D(bufferTexture,vec2(uv.x-xPixel,uv.y));\n"
+"    vec4 upColor = texture2D(bufferTexture,vec2(uv.x,uv.y+yPixel));\n"
+"    vec4 downColor = texture2D(bufferTexture,vec2(uv.x,uv.y-yPixel));\n"
+"    //Handle the bottom boundary\n"
+"    if(uv.y <= yPixel){\n"
+"     // downColor.rgb = vec3(0.0);\n"
 "    }\n"
 "    //Diffuse equation\n"
 "    float factor = 8.0 * 0.016 * (leftColor.r + rightColor.r + downColor.r * 3.0 + upColor.r - 6.0 * gl_FragColor.r);\n"
 "\n"
-"  //Account for low precision of texels\n"
-"    float minimum = 0.003;\n"
-"    if(factor >= -minimum && factor < 0.0) factor = -minimum;\n"
+"    if(factor >= -0.003 && factor < 0.0) factor = -0.003;\n"
 "\n"
 "    gl_FragColor.rgb += factor; \n"
 
@@ -62,7 +54,7 @@ const char* finalFrag = {
 " uniform sampler2D tex;\n"
 " void main() \n"
 " {\n"
-"   vec2 uv = pos.xy;\n"
+"   vec2 uv = 0.5*pos.xy + vec2(0.5, 0.5);\n"
 "   gl_FragColor = vec4(texture2D(tex, uv).xyz, 1.0);\n"
 " }\n"
 };
@@ -84,6 +76,7 @@ SmokeEffect::SmokeEffect(int width, int height)
 
   _resId = glGetUniformLocation(_smokeShader->id(), "res");
   _smokeSourceId = glGetUniformLocation(_smokeShader->id(), "smokeSource");
+  _sourceSizeId = glGetUniformLocation(_smokeShader->id(), "sourceSize");
   _timeId = glGetUniformLocation(_smokeShader->id(), "time");
 
   _finalShader = std::make_shared<Shader>();
@@ -96,18 +89,21 @@ void SmokeEffect::setScreen(int width, int height)
 
   _texture[0] = std::make_shared<FrameBuffer>(width, height);
   _texture[1] = std::make_shared<FrameBuffer>(width, height);
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void SmokeEffect::drawFrame()
 {
   _texture[_flipFlop?0:1]->bindFBO();
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  //glEnable(GL_BLEND);
+  //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   _smokeShader->use();
 
   glUniform1f(_timeId, App::getTime());
-  glUniform3f(_smokeSourceId, _width*_mousePos.x, _height*_mousePos.y, 0.0f);
+  glUniform1f(_sourceSizeId, 5.f);
+  glUniform3f(_smokeSourceId, _width*_mousePos.x, _height*_mousePos.y, 0.5f);
   glUniform2f(_resId, _width, _height);
 
   glActiveTexture(0);
@@ -124,6 +120,7 @@ void SmokeEffect::drawFrame()
   _heightMap->draw(_finalShader->getPosAttr());
 
   _flipFlop = !_flipFlop;
+
 }
 
 void SmokeEffect::touchMove(float x, float y)

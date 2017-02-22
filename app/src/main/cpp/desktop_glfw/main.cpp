@@ -54,6 +54,7 @@ int main(void)
       exit(EXIT_FAILURE);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+  glfwWindowHint(GLFW_SAMPLES, 16);
 
   window = glfwCreateWindow(640, 480, "Hatchbaby", NULL, NULL);
 
