@@ -15,6 +15,9 @@ struct Sample {
   float average;
 };
 
+bool mouseDown = false;
+double mouseX, mouseY;
+
 void imageDataFromFile(const char* filename)
 {
   BITMAPINFO* info = new BITMAPINFO;
@@ -44,6 +47,28 @@ static void window_size_callback(GLFWwindow* window, int width, int height)
 {
   App::get()->setScreen(width, height);
 }
+static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+{
+  mouseX = xpos;
+  mouseY = ypos;
+
+  if(mouseDown) {
+        App::get()->motionEvent(2, mouseX, mouseY);
+  }
+}
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT  && action == GLFW_PRESS)
+    {
+        mouseDown = true;
+        App::get()->motionEvent(0, mouseX, mouseY);
+    }
+    if (button == GLFW_MOUSE_BUTTON_LEFT  && action == GLFW_RELEASE)
+    {
+        mouseDown = false;
+        App::get()->motionEvent(1, mouseX, mouseY);
+    }
+}
 int main(void)
 {
 
@@ -68,6 +93,8 @@ int main(void)
 
   glfwSetWindowSizeCallback(window, window_size_callback);
   glfwSetKeyCallback(window, key_callback);
+  glfwSetMouseButtonCallback(window, mouse_button_callback);
+  glfwSetCursorPosCallback(window, cursor_position_callback);
   glfwMakeContextCurrent(window);
 #ifdef WIN32
   gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);

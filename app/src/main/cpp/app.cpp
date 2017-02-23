@@ -32,6 +32,11 @@ void CHECKGL_ERROR()
 
 App* App::theApp = nullptr;
 
+App::App() {
+
+    _currentGradient = 0;
+}
+
 void App::loadImage(const signed char* data, int dataSize, int width, int height)
 {
   ImageData imageData;
@@ -91,7 +96,7 @@ void App::drawFrame()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  Gradient& gradient = _gradients[0];
+  Gradient& gradient = _gradients[_currentGradient];
 
   _bgShader->use();
   _bgShader->setUniform(gradient.first, gradient.second);
@@ -111,10 +116,11 @@ void App::motionEvent(int type, float eventX, float eventY)
   {
       touchX = eventX;
       touchY = eventY;
+      mouseMoved = false;
   }
   else if(Android_Action_Up == type) {
 
-    if(abs(touchX - eventX) < 10 && abs(touchY - eventY) < 10)
+    if(!mouseMoved)
     {
       nextEffect();
     } 
@@ -128,6 +134,8 @@ void App::motionEvent(int type, float eventX, float eventY)
 
       touchX = eventX;
       touchY = eventY;
+
+      mouseMoved = true;
   }
 
 }
@@ -137,6 +145,10 @@ void App::nextEffect()
   _currentEffect++;
   if(_currentEffect >= _effectList.size()) {
     _currentEffect = 0;
+  }
+  _currentGradient++;
+  if(_currentGradient >= _gradients.size()) {
+    _currentGradient = 0;
   }
 
   _effectList[_currentEffect]->setScreen(_width, _height);

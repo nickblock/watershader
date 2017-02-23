@@ -25,6 +25,8 @@ public:
         return theApp;
     }
 
+    App();
+
     void init();
 
     void loadImage(const signed char* data, int dataSize, int width, int height);
@@ -48,6 +50,7 @@ protected:
 
     int _width, _height;
     float touchX, touchY;
+    bool mouseMoved;
 
     std::vector<std::shared_ptr<Effect>> _effectList;
 
@@ -55,6 +58,7 @@ protected:
     std::shared_ptr<HeightMap> _quad;
 
     int _currentEffect;
+    int _currentGradient;
 
 
     using Gradient = std::pair<glm::vec3, glm::vec3>;
